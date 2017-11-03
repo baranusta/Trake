@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+    <title>Robot Arm</title>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+    attribute vec2 vPosition;
+
+    uniform mediump vec2 displacement;
+    uniform mediump float length;
+
+    uniform lowp int orientation;
+    void main() { 
+        //Horizontal
+        mediump vec2 pos = vPosition;
+        if (orientation == 0){
+            pos[0] *= length;
+        }
+        else{
+            pos[1] *= length;
+        }
+        gl_Position = vec4(pos + displacement,0.0,1.0); 
+    }
+</script>
+<script id="fragment-shader" type="x-shader/x-fragment">
+    
+    uniform mediump vec2 end;
+    uniform mediump vec2 viewSize;
+    uniform mediump float width;
+
+
+    uniform int frame;
+    uniform lowp int orientation;
+
+    void main() { 
+
+        highp vec2 normalizedFragCoord = (gl_FragCoord.xy/viewSize) * 2.0 -1.0;
+        highp vec2 dif = normalizedFragCoord - end;
+        dif.x *= viewSize.x / viewSize.y;
+
+        // //Horizontal
+        if (orientation == 0){
+            mediump float y = sin(dif.x * 80.0 + float(frame) / 8.0) * (width * 0.5 );
+            if(y < dif.y - width || y> dif.y + width)
+                discard;
+        }
+        else{
+            mediump float x = sin(dif.y * 80.0 + float(frame) / 8.0) * (width * 0.5 );
+            if(x < dif.x - width || x> dif.x + width)
+                discard;
+        }
+        gl_FragColor = vec4(0.0,0.0,0.0,1.0); 
+    }
+    
+</script>
+
+
+<script type="text/javascript" src="Common/webgl-utils.js"></script>
+<script type="text/javascript" src="Common/initShaders.js"></script>
+<script type="text/javascript" src="Common/MV.js"></script>
+<script type="text/javascript" src="rectangle.js"></script>
+<script type="text/javascript" src="snake_part.js"></script>
+<script type="text/javascript" src="snake.js"></script>
+<script type="text/javascript" src="trake.js"></script>
+
+</head>
+
+<body>
+    <canvas id="gl-canvas" width="1024" height="512">
+        Oops ... your browser doesn't support the HTML5 canvas element
+    </canvas>
+</body>
+
+</html>
