@@ -1,46 +1,41 @@
-var DIRECTON = { EAST: 0, WEST: 1, NORTH: 2, SOUTH: 3 };
+
 class SnakePart {
 
-    constructor(name, center, width, direction, program) {
+    constructor(name, center, width, length, direction, program) {
         this.name = name;
-        this.speedY = 0.0;
-        this.displacement = [0, 0];
+        this.displacement = vec2(0, 0);
         this.direction = direction;
-        this.length = 0.7;
+        this.length = length;
 
         this.width = width;
         this.rectangle = new Rectangle(center, program);
     }
 
     draw(frame) {
-        this.rectangle.draw(frame,this.width, this.length, this.displacement, this.direction <= 1? 0:1);
+        this.rectangle.draw(frame,this.width, this.length, this.displacement, this.direction);
     }
 
     grow(speed) {
-        this.updateBody(speed);
+        this.length += speed;
     }
 
     shrink(speed) {
-        this.updateBody(-1 * speed);
+        this.length -= speed;
     }
 
-    updateBody(speed) {
+    move(speed){
         switch (this.direction) {
-            case DIRECTON.EAST:
+            case DIRECTION.EAST:
                 this.displacement[0] += speed / 2.0;
-                this.length += speed;
                 break;
-            case DIRECTON.WEST:
+            case DIRECTION.WEST:
                 this.displacement[0] -= speed / 2.0;
-                this.length += speed;
                 break;
-            case DIRECTON.NORTH:
+            case DIRECTION.NORTH:
                 this.displacement[1] += speed / 2.0;
-                this.length += speed;
                 break;
-            case DIRECTON.SOUTH:
+            case DIRECTION.SOUTH:
                 this.displacement[1] -= speed / 2.0;
-                this.length += speed;
                 break;
         }
     }

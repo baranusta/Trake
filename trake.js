@@ -2,7 +2,6 @@
 let player_1;
 let frame=0;
 
-var viewSize;
 let gameEnded = false;
 
 window.onload = function () {
@@ -16,7 +15,7 @@ window.onload = function () {
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(0, 1.0, 0, 1);
 
-    player_1 = new Snake( "P_1", vec2(-.3, 0), DIRECTON.NORTH );
+    player_1 = new Snake( "P_1", vec2(-.3, 0), DIRECTION.NORTH );
     
     gameLoop();
 }
@@ -35,5 +34,14 @@ const gameLoop = function(){
     {
         window.cancelAnimationFrame(gameLoop);
     }
+}
+
+document.onkeydown = function(e){ 
+    if(e.keyCode == 39)
+    {
+        player_1.turn(true);
+    }
+    else
+        player_1.turn(false);
 }
 

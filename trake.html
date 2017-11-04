@@ -9,14 +9,16 @@
     attribute vec2 vPosition;
 
     uniform mediump vec2 displacement;
+    uniform mediump vec2 viewSize;
     uniform mediump float length;
 
     uniform lowp int orientation;
     void main() { 
         //Horizontal
         mediump vec2 pos = vPosition;
-        if (orientation == 0){
-            pos[0] *= length;
+        
+        if (orientation == 1){
+            pos[0] *= length * viewSize.x / viewSize.y;
         }
         else{
             pos[1] *= length;
@@ -41,7 +43,7 @@
         dif.x *= viewSize.x / viewSize.y;
 
         // //Horizontal
-        if (orientation == 0){
+        if (orientation == 1){
             mediump float y = sin(dif.x * 80.0 + float(frame) / 8.0) * (width * 0.5 );
             if(y < dif.y - width || y> dif.y + width)
                 discard;
@@ -60,6 +62,9 @@
 <script type="text/javascript" src="Common/webgl-utils.js"></script>
 <script type="text/javascript" src="Common/initShaders.js"></script>
 <script type="text/javascript" src="Common/MV.js"></script>
+
+<script type="text/javascript" src="globals.js"></script>
+<script type="text/javascript" src="direction.js"></script>
 <script type="text/javascript" src="rectangle.js"></script>
 <script type="text/javascript" src="snake_part.js"></script>
 <script type="text/javascript" src="snake.js"></script>
