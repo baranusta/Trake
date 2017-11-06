@@ -32,7 +32,7 @@ class Snake {
                 center[1] += length / 2.0;
                 break;
         }
-        this.parts = [new SnakePart("0", center, 0.02, length, direction, this.program)];
+        this.parts = [new SnakePart("0", center, [0.02, length], direction, this.program)];
         this.i_head = 0;
         this.i_tail = 0;
     }
@@ -43,43 +43,26 @@ class Snake {
         });
     }
 
-    updatePart(index, func){
-        if(isHorizontal(this.parts[index].direction))
-        {
-            let speed = this.speed * viewSize[1]/viewSize[0]
-            this.parts[index].move(speed);
-            func(speed);
-        }
-        else
-        {
-            this.parts[index].move(this.speed);
-            func(this.speed);
-        }
+    getCollider(){
+        return new Box(this.parts[this.i_head].displacement, [0.02,this.parts[this.i_head].length]);
+    }
+
+    eachCollisionBox(func){
+        this.parts.forEach(function (part) {
+            if(!func(part.collisionBox))
+            {
+                return;
+            }
+        });
+    }
+
+    isFirstPartsCollisionBox(collisionBox){
+        return collisionBox === this.parts[this.i_head].collisionBox
     }
 
     update() {
-        if(isHorizontal(this.parts[this.i_head].direction))
-        {
-            let speed = this.speed * viewSize[1]/viewSize[0]
-            this.parts[this.i_head].move(speed);
-            this.parts[this.i_head].grow(speed);
-        }
-        else
-        {
-            this.parts[this.i_head].move(this.speed);
-            this.parts[this.i_head].grow(this.speed);
-        }
-        if(isHorizontal(this.parts[this.i_tail].direction))
-        {
-            let speed = this.speed * viewSize[1]/viewSize[0]
-            this.parts[this.i_tail].move(speed);
-            this.parts[this.i_tail].shrink(speed);
-        }
-        else
-        {
-            this.parts[this.i_tail].move(this.speed);
-            this.parts[this.i_tail].shrink(this.speed);
-        }
+        this.parts[this.i_head].move(this.speed, 1);
+        this.parts[this.i_tail].move(this.speed, -1);
         if (this.parts[this.i_tail].length <= 0) {
             this.parts.splice(this.i_tail, 1);
             this.i_head--;
@@ -94,10 +77,8 @@ class Snake {
             direction = this.parts[this.i_head].direction - 1;
             direction += DIRECTION.COUNT;
         }
-        console.log(direction);
         direction %= DIRECTION.COUNT;
-        console.log(direction);
-        var startPoint = add(this.parts[this.i_head].rectangle.displacement, this.parts[this.i_head].displacement);
+        var startPoint = vec2(this.parts[this.i_head].displacement[0], this.parts[this.i_head].displacement[1]);
 
         {
             let constant = isPositiveDir(this.parts[this.i_head].direction) ? +1 / 2.0 : -1 / 2.0;
@@ -107,7 +88,7 @@ class Snake {
             else
                 startPoint[1] += this.parts[this.i_head].length * constant;
         }
-        this.parts.push(new SnakePart("P_1", startPoint, 0.02, 0.0, direction, this.program));
+        this.parts.push(new SnakePart("P_1", startPoint, [0.02, 0.0], direction, this.program));
         this.i_head = this.parts.length - 1;
     }
 }

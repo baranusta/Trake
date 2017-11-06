@@ -1,12 +1,10 @@
 class Rectangle {
 
-    constructor(center, program) {
+    constructor(program) {
         this.program = program;
 
         this.vao = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vao);
-
-        this.displacement = center;
 
         let vertices = [
             vec2(0.5 / 2, 0.5),
@@ -40,10 +38,8 @@ class Rectangle {
 
         gl.uniform2f(this.program.viewSize, viewSize[0], viewSize[1]);
 
-        let temp_displacement = add(displacement, this.displacement);
-
         {
-            let end = vec2(temp_displacement[0], temp_displacement[1]);
+            let end = vec2(displacement[0], displacement[1]);
             let offset = frame;
             let constant = 1 / 2.0;
             if (!isPositiveDir(direction)) {
@@ -64,8 +60,8 @@ class Rectangle {
         }
 
         gl.uniform2f(this.program.displacement,
-            temp_displacement[0],
-            temp_displacement[1]
+            displacement[0],
+            displacement[1]
         );
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vao);
