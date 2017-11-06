@@ -33,7 +33,7 @@
     uniform mediump float width;
 
 
-    uniform int frame;
+    uniform int offset;
     uniform lowp int orientation;
 
     void main() { 
@@ -44,12 +44,12 @@
 
         // //Horizontal
         if (orientation == 1){
-            mediump float y = sin(dif.x * 80.0 + float(frame) / 8.0) * (width * 0.5 );
+            mediump float y = sin(dif.x * 80.0 + float(offset) / 8.0) * (width * 0.5 );
             if(y < dif.y - width || y> dif.y + width)
                 discard;
         }
         else{
-            mediump float x = sin(dif.y * 80.0 + float(frame) / 8.0) * (width * 0.5 );
+            mediump float x = sin(dif.y * 80.0 + float(offset) / 8.0) * (width * 0.5 );
             if(x < dif.x - width || x> dif.x + width)
                 discard;
         }

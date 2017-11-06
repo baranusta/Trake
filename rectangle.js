@@ -33,7 +33,6 @@ class Rectangle {
     draw(frame, width, length, displacement, direction) {
         gl.useProgram(this.program);
 
-        gl.uniform1i(this.program.frame, frame);
         gl.uniform1i(this.program.orientation, isHorizontal(direction));
 
         gl.uniform1f(this.program.length, length);
@@ -42,10 +41,15 @@ class Rectangle {
         gl.uniform2f(this.program.viewSize, viewSize[0], viewSize[1]);
 
         let temp_displacement = add(displacement, this.displacement);
-        
+
         {
-            let end = vec2(temp_displacement[0],temp_displacement[1]);
-            let constant = isPositiveDir(direction) ? +1 / 2.0 : -1 / 2.0;
+            let end = vec2(temp_displacement[0], temp_displacement[1]);
+            let offset = frame;
+            let constant = 1 / 2.0;
+            if (!isPositiveDir(direction)) {
+                offset *= -1;
+                constant *= -1;
+            }
             if (isHorizontal(direction)) {
                 end[0] -= length * constant;
             }
@@ -56,6 +60,7 @@ class Rectangle {
                 end[0],
                 end[1]
             );
+            gl.uniform1i(this.program.offset, offset);
         }
 
         gl.uniform2f(this.program.displacement,

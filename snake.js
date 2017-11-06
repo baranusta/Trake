@@ -11,7 +11,7 @@ class Snake {
         this.program.frequency = gl.getUniformLocation(this.program, 'frequency');
         this.program.end = gl.getUniformLocation(this.program, 'end');
         this.program.orientation = gl.getUniformLocation(this.program, 'orientation');
-        this.program.frame = gl.getUniformLocation(this.program, 'frame');
+        this.program.offset = gl.getUniformLocation(this.program, 'offset');
 
         this.program.viewSize = gl.getUniformLocation(this.program, 'viewSize');
         this.program.displacement = gl.getUniformLocation(this.program, 'displacement');
@@ -94,8 +94,9 @@ class Snake {
             direction = this.parts[this.i_head].direction - 1;
             direction += DIRECTION.COUNT;
         }
-
+        console.log(direction);
         direction %= DIRECTION.COUNT;
+        console.log(direction);
         var startPoint = add(this.parts[this.i_head].rectangle.displacement, this.parts[this.i_head].displacement);
 
         {
