@@ -1,16 +1,16 @@
 class Rectangle {
 
-    constructor(program) {
-        this.program = program;
+    constructor(vertexShaderName, fragmenShaderName) {
+        this.program = initShaders(gl, vertexShaderName, fragmenShaderName);
 
         this.vao = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vao);
 
         let vertices = [
-            vec2(0.5 / 2, 0.5),
-            vec2(- 0.5 / 2, 0.5),
-            vec2(0.5 / 2, -0.5),
-            vec2(- 0.5 / 2, -0.5)
+            vec2(0.5, 0.5),
+            vec2(- 0.5 , 0.5),
+            vec2(0.5, -0.5),
+            vec2(- 0.5, -0.5)
         ];
 
         gl.bufferData(gl.ARRAY_BUFFER, flatten(vertices), gl.STATIC_DRAW);
@@ -30,35 +30,13 @@ class Rectangle {
 
     draw(frame, width, length, displacement, direction) {
         gl.useProgram(this.program);
-
         gl.uniform1i(this.program.orientation, isHorizontal(direction));
 
         gl.uniform1f(this.program.length, length);
         gl.uniform1f(this.program.width, width);
 
         gl.uniform2f(this.program.viewSize, viewSize[0], viewSize[1]);
-
-        {
-            let end = vec2(displacement[0], displacement[1]);
-            let offset = frame;
-            let constant = 1 / 2.0;
-            if (!isPositiveDir(direction)) {
-                offset *= -1;
-                constant *= -1;
-            }
-            if (isHorizontal(direction)) {
-                end[0] -= length * constant;
-            }
-            else
-                end[1] -= length * constant;
-
-            gl.uniform2f(this.program.end,
-                end[0],
-                end[1]
-            );
-            gl.uniform1i(this.program.offset, offset);
-        }
-
+        
         gl.uniform2f(this.program.displacement,
             displacement[0],
             displacement[1]

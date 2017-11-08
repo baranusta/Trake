@@ -1,6 +1,6 @@
 class Physics {
     static parameterCheck(outer, inner) {
-        if (outer instanceof Box && outer instanceof Box)
+        if (!!outer && !!inner && outer instanceof Box && inner instanceof Box)
             return true;
         return false;
     }
@@ -26,7 +26,7 @@ class Physics {
     }
 
     static isColliding(outer, inner) {
-        return !this.isCompletelyOutside(outer, inner);
+        return this.parameterCheck(outer, inner) && !this.isCompletelyOutside(outer, inner);
     }
 
 };

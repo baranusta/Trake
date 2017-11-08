@@ -37,9 +37,12 @@ const gameLoop = function(){
 
             if(Physics.isColliding(player_2.getCollider(),collisionBox)){
                 if(!player_2.isFirstPartsCollisionBox(collisionBox))
+                {
                     console.log("player2 self collided");
-                return false;
+                    return false;
+                }    
             }
+            return true;
         });
 
         player_1.eachCollisionBox(function(collisionBox){
@@ -50,9 +53,12 @@ const gameLoop = function(){
             
             if(Physics.isColliding(player_1.getCollider(),collisionBox)){
                 if(!player_1.isFirstPartsCollisionBox(collisionBox))
+                {
                     console.log("player1 self collided");
-                return false;
+                    return false;
+                }    
             }
+            return true;
         });
 
 
