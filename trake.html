@@ -58,7 +58,7 @@
     
 </script>
 
-<script id="snake-head-vertex-shader" type="x-shader/x-vertex">
+<script id="rectangle-vertex-shader" type="x-shader/x-vertex">
     attribute vec2 vPosition;
 
     uniform mediump vec2 displacement;
@@ -77,7 +77,7 @@
     }
 </script>
 
-<script id="snake-head-fragment-shader" type="x-shader/x-fragment">
+<script id="rectangle-fragment-shader" type="x-shader/x-fragment">
     
     uniform mediump vec2 viewSize;
 
@@ -96,11 +96,18 @@
 <script type="text/javascript" src="Common/MV.js"></script>
 <script type="text/javascript" src="globals.js"></script>
 <script type="text/javascript" src="direction.js"></script>
-<script type="text/javascript" src="render/rectangle.js"></script>
 <script type="text/javascript" src="physics/physics.js"></script>
+
+<script type="text/javascript" src="render/rectangle.js"></script>
+<script type="text/javascript" src="game_objects/rectangle_game_object.js"></script>
+
 <script type="text/javascript" src="game_objects/snake/snake_head.js"></script>
 <script type="text/javascript" src="game_objects/snake/snake_part.js"></script>
 <script type="text/javascript" src="game_objects/snake/snake.js"></script>
+
+<script type="text/javascript" src="game_objects/collectible/collectible.js"></script>
+<script type="text/javascript" src="game_objects/collectible/collectibleFactory.js"></script>
+
 <script type="text/javascript" src="trake.js"></script>
 
 </head>

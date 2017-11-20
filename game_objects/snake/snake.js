@@ -6,7 +6,7 @@ class Snake {
         this.speed = 0.002;
 
 
-        var length = 0.7;
+        var length = snakeInitialLength;
         var center = vec2(startPoint);
         switch (direction) {
             case DIRECTION.EAST:
@@ -27,6 +27,7 @@ class Snake {
         this.i_last = 0;
         this.head = new SnakeHead(startPoint, [0.1, 0.1], direction);
         this.head.move(direction,0);
+        this.changingLength = this.parts[this.i_last].length;
     }
 
     draw(frame) {
@@ -49,7 +50,6 @@ class Snake {
                 return;
             }
         });
-        
     }
 
     isFirstPartsCollisionBox(collisionBox) {
@@ -62,11 +62,18 @@ class Snake {
 
     update() {
         this.head.move(this.parts[this.i_first].direction, this.speed);
+
         this.parts[this.i_first].move(this.speed, 1);
-        this.parts[this.i_last].move(this.speed, -1);
+        let length = this.parts[this.i_first].length;
+        if(this.i_first !== this.i_last)
+            length += this.parts[this.i_last].length;
+        if(length > this.changingLength)
+            this.parts[this.i_last].move(this.speed, -1);
+            
         if (this.parts[this.i_last].length <= 0) {
             this.parts.splice(this.i_last, 1);
             this.i_first--;
+            this.changingLength = this.parts[this.i_last].length;
         }
     }
 
@@ -89,6 +96,9 @@ class Snake {
             else
                 startPoint[1] += this.parts[this.i_first].length * constant;
         }
+        if(this.i_last !== this.i_first)
+            this.changingLength = this.changingLength - this.parts[this.i_first].length;
+
         this.parts.push(new SnakePart("P_1", startPoint, [0.02, 0.0], direction));
         this.i_first = this.parts.length - 1;
     }
