@@ -61,8 +61,8 @@ const gameLoop = function(){
             return true;
         });
 
-
-        player_1.update();
+        if(move)
+            player_1.update();
         player_1.draw(frame);
         player_2.draw(frame);
         window.requestAnimationFrame(gameLoop);
@@ -73,12 +73,18 @@ const gameLoop = function(){
     }
 }
 
+var move = true;
 document.onkeydown = function(e){ 
+    console.log(e.keyCode);
     if(e.keyCode == 39)
     {
         player_1.turn(true);
     }
-    else
+    else if(e.keyCode == 37)
         player_1.turn(false);
+    else if(e.keyCode == 65)
+    {
+        move = !move;
+    }
 }
 

@@ -97,7 +97,6 @@ class SnakePart extends Rectangle {
         {
             boxSize = [this.width * viewSize[1] / viewSize[0], this.length];
         }
-        console.log(boxSize);
         this.collisionBox = new Box(this.displacement, boxSize);
     }
 }
