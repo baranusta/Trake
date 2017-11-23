@@ -21,13 +21,20 @@ window.onload = function () {
     player_1 = new Snake("P_1", vec2(-.3, 0), DIRECTION.NORTH);
     player_2 = new Snake("P_1", vec2(.3, 0), DIRECTION.NORTH);
     world.boundaries = new Box([0, 0], [2, 2]);
-    gameLoop();
+    loadTexture(gl,"http://localhost:10001/snake-head.png", function(texture){
+        player_1.head.addTexture(texture);
+        player_2.head.addTexture(texture);
+        gameLoop();
+    });
 }
 
 const gameLoop = function () {
     gl.clear(gl.COLOR_BUFFER_BIT);
     frame++;
 
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    
     if (!gameEnded) {
 
         checkPlayerCollision(0, [player_1, player_2], collectibles);

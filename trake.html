@@ -65,27 +65,35 @@
     uniform mediump vec2 viewSize;
     uniform mediump float length;
     uniform mediump float width;
+    
+    attribute vec2 uvTexture;
+    varying mediump vec2 texCoord;
 
     uniform lowp int orientation;
+    uniform sampler2D uSampler;
+
     void main() { 
         //Horizontal
         mediump vec2 pos = vPosition;
         
         pos[0] *= width;
         pos[1] *= length;
+        texCoord = uvTexture;
+        uSampler;
         gl_Position = vec4(pos + displacement,0.0,1.0); 
     }
 </script>
 
 <script id="rectangle-fragment-shader" type="x-shader/x-fragment">
     
+    uniform sampler2D uSampler;
     uniform mediump vec2 viewSize;
 
     uniform lowp int orientation;
+    varying mediump vec2 texCoord;
 
     void main() { 
-
-        gl_FragColor = vec4(0.0,0.0,0.0,1.0); 
+        gl_FragColor = texture2D(uSampler, texCoord);
     }
     
 </script>

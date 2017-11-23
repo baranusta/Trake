@@ -1,27 +1,26 @@
-class RectangleGameObject extends Rectangle{
+class RectangleGameObject{
     constructor(center, size, direction) {
-        super('rectangle-vertex-shader', 'rectangle-fragment-shader');
+        this.rectangle = new Rectangle('rectangle-vertex-shader', 'rectangle-fragment-shader');
         this.displacement = center;
         this.direction = direction;
         this.size = size;
         this.resized_size = vec2(this.size);
         
 
-        this.program.length = gl.getUniformLocation(this.program, 'length');
-        this.program.width = gl.getUniformLocation(this.program, 'width');
-        this.program.frequency = gl.getUniformLocation(this.program, 'frequency');
-        this.program.end = gl.getUniformLocation(this.program, 'end');
-        this.program.orientation = gl.getUniformLocation(this.program, 'orientation');
-        this.program.offset = gl.getUniformLocation(this.program, 'offset');
+        this.rectangle.program.length = gl.getUniformLocation(this.rectangle.program, 'length');
+        this.rectangle.program.width = gl.getUniformLocation(this.rectangle.program, 'width');
+        this.rectangle.program.frequency = gl.getUniformLocation(this.rectangle.program, 'frequency');
+        this.rectangle.program.end = gl.getUniformLocation(this.rectangle.program, 'end');
+        this.rectangle.program.orientation = gl.getUniformLocation(this.rectangle.program, 'orientation');
+        this.rectangle.program.offset = gl.getUniformLocation(this.rectangle.program, 'offset');
 
-        this.program.viewSize = gl.getUniformLocation(this.program, 'viewSize');
-        this.program.displacement = gl.getUniformLocation(this.program, 'displacement');
+        this.rectangle.program.viewSize = gl.getUniformLocation(this.rectangle.program, 'viewSize');
+        this.rectangle.program.displacement = gl.getUniformLocation(this.rectangle.program, 'displacement');
         this.collider = new Box(this.displacement, this.resized_size);
     }
-
     
     draw(frame) {
-        super.draw(frame, this.resized_size[0],this.resized_size[1] , this.displacement, this.direction);
+        this.rectangle.draw(frame, this.resized_size[0],this.resized_size[1] , this.displacement, this.direction);
     }
 
     move(direction, speed) {

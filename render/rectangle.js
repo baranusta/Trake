@@ -8,7 +8,7 @@ class Rectangle {
 
         let vertices = [
             vec2(0.5, 0.5),
-            vec2(- 0.5 , 0.5),
+            vec2(- 0.5, 0.5),
             vec2(0.5, -0.5),
             vec2(- 0.5, -0.5)
         ];
@@ -16,16 +16,25 @@ class Rectangle {
         gl.bufferData(gl.ARRAY_BUFFER, flatten(vertices), gl.STATIC_DRAW);
 
         this.vao_attr = gl.getAttribLocation(this.program, 'vPosition');
-        gl.enableVertexAttribArray(this.vao_attr);
-        gl.vertexAttribPointer(this.vao_attr, 2, gl.FLOAT, false, 0, 0);
-
+        this.tex_attr = gl.getAttribLocation(this.program, 'uvTexture');
+        this.uSampler = gl.getAttribLocation(this.program, 'uSampler');
+        
         let indices = [0, 1, 2, 2, 1, 3];
         this.ebo = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.ebo);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
+        this.texture = null;
+        this.textureOffset = 0;
+    }
 
+    addTexture(texture, textureCoordinates){
+        this.texture = texture;
+        this.tex_CoordBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.tex_CoordBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates),
+            gl.STATIC_DRAW);
     }
 
     draw(frame, width, length, displacement, direction) {
@@ -36,7 +45,7 @@ class Rectangle {
         gl.uniform1f(this.program.width, width);
 
         gl.uniform2f(this.program.viewSize, viewSize[0], viewSize[1]);
-        
+
         gl.uniform2f(this.program.displacement,
             displacement[0],
             displacement[1]
@@ -46,6 +55,24 @@ class Rectangle {
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.ebo);
         gl.enableVertexAttribArray(this.vao_attr);
         gl.vertexAttribPointer(this.vao_attr, 2, gl.FLOAT, false, 0, 0);
+
+
+        if(!!this.texture)
+        {
+            gl.activeTexture(gl.TEXTURE0);
+            // Bind the texture to texture unit 0
+            gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            // Tell the shader we bound the texture to texture unit 0
+            //gl.uniform1i(this.uSampler, 0);
+            
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.tex_CoordBuffer);
+            gl.enableVertexAttribArray(this.tex_attr);
+            let textureIndex = 0;
+            textureIndex += isHorizontal(direction) ? 2:0;
+            textureIndex += isPositiveDir(direction) ? 0:1;
+            gl.vertexAttribPointer(this.tex_attr, 2, gl.FLOAT, false, 0, 4 * 2 * textureIndex * 4);
+        }
+        
 
         gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
     }
