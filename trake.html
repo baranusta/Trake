@@ -11,6 +11,7 @@
     uniform mediump vec2 displacement;
     uniform mediump vec2 viewSize;
     uniform mediump float length;
+    uniform mediump float width;
 
     uniform lowp int orientation;
     void main() { 
@@ -19,8 +20,10 @@
         
         if (orientation == 1){
             pos[0] *= length;
+            pos[1] *= width * 2.0;
         }
         else{
+            pos[0] *= width * 2.0;
             pos[1] *= length;
         }
         gl_Position = vec4(pos + displacement,0.0,1.0); 
@@ -43,13 +46,13 @@
         dif.x *= viewSize.x / viewSize.y;
 
         // //Horizontal
-        if (orientation == 1){
-            mediump float y = sin(dif.x * 80.0 + float(offset) / 8.0) * (width * 0.5 );
+        if (orientation == 1 && abs(dif.x) > width * 2.0){
+            mediump float y = sin(dif.x * 80.0 + float(offset) / 8.0) * width * 0.6;
             if(y < dif.y - width || y> dif.y + width)
                 discard;
         }
-        else{
-            mediump float x = sin(dif.y * 80.0 + float(offset) / 8.0) * (width * 0.5 * viewSize.x / viewSize.y );
+        else if(abs(dif.y) > width * 2.0 * viewSize.x / viewSize.y){
+            mediump float x = sin(dif.y * 80.0 + float(offset) / 8.0) * (width * 0.6* viewSize.x / viewSize.y );
             if(x < dif.x - width* viewSize.x / viewSize.y || x> dif.x + width* viewSize.x / viewSize.y)
                 discard;
         }
