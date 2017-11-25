@@ -39,6 +39,7 @@ class Rectangle {
 
     draw(frame, width, length, displacement, direction) {
         gl.useProgram(this.program);
+        console.log(isHorizontal(direction));
         gl.uniform1i(this.program.orientation, isHorizontal(direction));
 
         gl.uniform1f(this.program.length, length);

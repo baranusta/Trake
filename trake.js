@@ -14,6 +14,7 @@ window.onload = function () {
         alert("yo");
     }
     viewSize = [canvas.width, canvas.height];
+    aspectRatio = viewSize[0]/viewSize[1];
 
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(0, 1.0, 0, 1);

@@ -18,14 +18,12 @@ class SnakePart extends Rectangle {
         this.length = size[1];
         this.width = size[0];
 
-        if (isHorizontal(direction))
-        {
-            this.length *= viewSize[1] / viewSize[0];
-        }else
-        {
-            this.width *= viewSize[1] / viewSize[0];
+        if (isHorizontal(direction)) {
+            this.length /= aspectRatio;
+        } else {
+            this.width /= aspectRatio;
         }
-        
+
         this.collisionBox = new Box(this.displacement, size);
     }
 
@@ -69,11 +67,11 @@ class SnakePart extends Rectangle {
     move(speed, updateSize) {
         switch (this.direction) {
             case DIRECTION.EAST:
-                speed = (speed * viewSize[1] / viewSize[0]);
+                speed = (speed / aspectRatio);
                 this.displacement[0] += speed / 2.0;
                 break;
             case DIRECTION.WEST:
-                speed = (speed * viewSize[1] / viewSize[0]);
+                speed = (speed / aspectRatio);
                 this.displacement[0] -= speed / 2.0;
                 break;
             case DIRECTION.NORTH:
@@ -89,13 +87,11 @@ class SnakePart extends Rectangle {
             this.shrink(speed);
 
         var boxSize;
-        if (isHorizontal(this.direction))
-        {
-            boxSize = [this.length * viewSize[1] / viewSize[0], this.width];
+        if (isHorizontal(this.direction)) {
+            boxSize = [this.length / aspectRatio, this.width];
         }
-        else
-        {
-            boxSize = [this.width * viewSize[1] / viewSize[0], this.length];
+        else {
+            boxSize = [this.width / aspectRatio, this.length];
         }
         this.collisionBox = new Box(this.displacement, boxSize);
     }
