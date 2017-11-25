@@ -31,7 +31,7 @@ class Snake {
     }
 
     draw(frame) {
-        this.head.draw(frame);
+        //this.head.draw(frame);
         this.parts.forEach(function (part) {
             part.draw(frame);
         });
@@ -78,6 +78,13 @@ class Snake {
     }
 
     turn(isRight) {
+
+        if((isHorizontal(this.parts[this.i_first].direction) && this.parts[this.i_first].length < snakeWidth * 2 / aspectRatio)
+            || this.parts[this.i_first].length < snakeWidth * 2)
+        {
+            return;
+        }
+            
         var direction;
         if (isRight)
             direction = this.parts[this.i_first].direction + 1;

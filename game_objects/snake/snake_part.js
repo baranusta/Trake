@@ -67,11 +67,11 @@ class SnakePart extends Rectangle {
     move(speed, updateSize) {
         switch (this.direction) {
             case DIRECTION.EAST:
-                speed = (speed / aspectRatio);
+                speed /= aspectRatio;
                 this.displacement[0] += speed / 2.0;
                 break;
             case DIRECTION.WEST:
-                speed = (speed / aspectRatio);
+                speed /= aspectRatio;
                 this.displacement[0] -= speed / 2.0;
                 break;
             case DIRECTION.NORTH:
