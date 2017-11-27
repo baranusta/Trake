@@ -44,19 +44,25 @@
         highp vec2 normalizedFragCoord = (gl_FragCoord.xy/viewSize) * 2.0 -1.0;
         highp vec2 dif = normalizedFragCoord - end;
         dif.x *= viewSize.x / viewSize.y;
-
+        highp float c = 0.4;
         // //Horizontal
         if (orientation == 1 && abs(dif.x) > width * 2.0){
             mediump float y = sin(dif.x * 80.0 + float(offset) / 8.0) * width * 0.6;
-            if(y < dif.y - width || y> dif.y + width)
+            highp float dist = dif.y - y;
+            if( abs(dist) > width)
                 discard;
+            else
+                c = dist / width * 2.0;
         }
         else if(abs(dif.y) > width * 2.0 * viewSize.x / viewSize.y){
             mediump float x = sin(dif.y * 80.0 + float(offset) / 8.0) * (width * 0.6* viewSize.x / viewSize.y );
-            if(x < dif.x - width* viewSize.x / viewSize.y || x> dif.x + width* viewSize.x / viewSize.y)
+            highp float dist = dif.x - x;
+            if( abs(dist) > width* viewSize.x / viewSize.y)
                 discard;
+            else
+                c = dist / width;
         }
-        gl_FragColor = vec4(0.0,0.0,0.0,1.0); 
+        gl_FragColor = vec4(0.0,c,0.0,1.0); 
     }
     
 </script>

@@ -26,15 +26,16 @@ class Snake {
         this.i_first = 0;
         this.i_last = 0;
         this.head = new SnakeHead(startPoint, [0.1, 0.1], direction);
-        this.head.move(direction,0);
+        this.head.move(0);
+        this.head.changeDirection(direction);
         this.changingLength = this.parts[this.i_last].length;
     }
 
     draw(frame) {
-        //this.head.draw(frame);
         this.parts.forEach(function (part) {
             part.draw(frame);
         });
+        this.head.draw(frame);
     }
 
     getCollider() {
@@ -42,7 +43,7 @@ class Snake {
     }
 
     eachCollisionBox(func) {
-        if(!func(this.head.collider))
+        if (!func(this.head.collider))
             return;
 
         this.parts.forEach(function (part) {
@@ -61,15 +62,15 @@ class Snake {
     }
 
     update() {
-        this.head.move(this.parts[this.i_first].direction, this.speed);
+        this.head.move(this.speed);
 
         this.parts[this.i_first].move(this.speed, 1);
         let length = this.parts[this.i_first].length;
-        if(this.i_first !== this.i_last)
+        if (this.i_first !== this.i_last)
             length += this.parts[this.i_last].length;
-        if(length > this.changingLength)
+        if (length > this.changingLength)
             this.parts[this.i_last].move(this.speed, -1);
-            
+
         if (this.parts[this.i_last].length <= 0) {
             this.parts.splice(this.i_last, 1);
             this.i_first--;
@@ -79,12 +80,12 @@ class Snake {
 
     turn(isRight) {
 
-        if((isHorizontal(this.parts[this.i_first].direction) && this.parts[this.i_first].length < snakeWidth * 2 / aspectRatio)
-            || this.parts[this.i_first].length < snakeWidth * 2)
-        {
-            return;
-        }
-            
+        // if((isHorizontal(this.parts[this.i_first].direction) && this.parts[this.i_first].length < snakeWidth * 2 / aspectRatio)
+        //     || this.parts[this.i_first].length < snakeWidth * 2)
+        // {
+        //     return;
+        // }
+
         var direction;
         if (isRight)
             direction = this.parts[this.i_first].direction + 1;
@@ -99,24 +100,20 @@ class Snake {
             let constant = isPositiveDir(this.parts[this.i_first].direction) ? +1 / 2.0 : -1 / 2.0;
             if (isHorizontal(this.parts[this.i_first].direction)) {
                 startPoint[0] += (this.parts[this.i_first].length + 2.0 * snakeWidth / aspectRatio) * constant;
-                startPoint[1] -= snakeWidth * (isPositiveDir(direction) ? +1  : -1);
+                startPoint[1] -= snakeWidth * (isPositiveDir(direction) ? +1 : -1);
             }
-            else{
+            else {
                 startPoint[0] -= snakeWidth * (isPositiveDir(direction) ? +1 : -1) / aspectRatio;
-                startPoint[1] += (this.parts[this.i_first].length + 2.0 * snakeWidth) * constant;           
+                startPoint[1] += (this.parts[this.i_first].length + 2.0 * snakeWidth) * constant;
             }
         }
-
-
-
-        if(true){
-            
-            if(this.i_last !== this.i_first)
+        this.head.changeDirection(direction);
+        this.head.setStartPoint(startPoint);
+        if (this.i_last !== this.i_first)
             this.changingLength = this.changingLength - this.parts[this.i_first].length;
 
-            this.parts.push(new SnakePart("P_1", startPoint, [snakeWidth, 0.0], direction));
-            this.i_first = this.parts.length - 1;
-        
-        }
+        this.parts.push(new SnakePart("P_1", startPoint, [snakeWidth, 0.0], direction));
+        this.i_first = this.parts.length - 1;
+
     }
 }

@@ -1,8 +1,28 @@
 
 class SnakeHead extends RectangleGameObject {
-    move(direction, speed) {
+    constructor(startPoint, size, direction) {
+        super(startPoint,size,direction);
+        if(isHorizontal(direction))
+            super.move(this.direction, size[0]/2);
+        else
+            super.move(this.direction, size[1]/2);
+    }
+
+    move(speed) {
+        super.move(this.direction, speed);
+    }
+
+    changeDirection(direction){
         this.direction = direction;
-        super.move(direction, speed);
+    }
+
+    setStartPoint(startPoint){
+        this.displacement = vec2(startPoint);
+
+        if(isHorizontal(this.direction))
+            super.move(this.direction, this.resized_size[0]/2);
+        else
+            super.move(this.direction, this.resized_size[1]/2);
     }
 
     addTexture(texture) {

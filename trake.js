@@ -17,15 +17,15 @@ window.onload = function () {
     aspectRatio = viewSize[0]/viewSize[1];
 
     gl.viewport(0, 0, canvas.width, canvas.height);
-    gl.clearColor(0, 1.0, 0, 1);
+    gl.clearColor(0, 0.0, 1, 1);
 
     player_1 = new Snake("P_1", vec2(-.3, 0), DIRECTION.NORTH);
     player_2 = new Snake("P_1", vec2(.3, 0), DIRECTION.NORTH);
     world.boundaries = new Box([0, 0], [2, 2]);
     loadTexture(gl,"http://localhost:10001/snake-head.png", function(texture){
+        gameLoop();
         player_1.head.addTexture(texture);
         player_2.head.addTexture(texture);
-        gameLoop();
     });
 }
 
