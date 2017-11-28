@@ -1,16 +1,8 @@
 
 class SnakePart extends Rectangle {
 
-    constructor(name, center, size, direction) {
+    constructor(name, center, size, direction, color) {
         super('snake-vertex-shader', 'snake-fragment-shader');
-        this.program.length = gl.getUniformLocation(this.program, 'length');
-        this.program.width = gl.getUniformLocation(this.program, 'width');
-        this.program.end = gl.getUniformLocation(this.program, 'end');
-        this.program.orientation = gl.getUniformLocation(this.program, 'orientation');
-        this.program.offset = gl.getUniformLocation(this.program, 'offset');
-
-        this.program.viewSize = gl.getUniformLocation(this.program, 'viewSize');
-        this.program.displacement = gl.getUniformLocation(this.program, 'displacement');
 
         this.name = name;
         this.displacement = center;
@@ -27,7 +19,7 @@ class SnakePart extends Rectangle {
         this.collisionBox = new Box(this.displacement, size);
     }
 
-    draw(frame) {
+    draw(frame, color) {
 
         gl.useProgram(this.program);
         {
@@ -53,7 +45,7 @@ class SnakePart extends Rectangle {
             );
             gl.uniform1i(this.program.offset, offset);
         }
-        super.draw(frame, this.width, this.length, this.displacement, this.direction);
+        super.draw(frame, this.width, this.length, this.displacement, this.direction, color);
     }
 
     grow(speed) {

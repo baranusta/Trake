@@ -34,6 +34,7 @@
     uniform mediump vec2 end;
     uniform mediump vec2 viewSize;
     uniform mediump float width;
+    uniform mediump vec4 color;
 
 
     uniform int offset;
@@ -62,7 +63,7 @@
             else
                 c = dist / width;
         }
-        gl_FragColor = vec4(0.0,c,0.0,1.0); 
+        gl_FragColor = color * vec4(c,c,c,1.0); 
     }
     
 </script>
@@ -97,12 +98,15 @@
     
     uniform sampler2D uSampler;
     uniform mediump vec2 viewSize;
+    uniform mediump vec4 color;
 
     uniform lowp int orientation;
     varying mediump vec2 texCoord;
 
     void main() { 
-        gl_FragColor = texture2D(uSampler, texCoord);
+        mediump vec4 colorTex = texture2D(uSampler, texCoord);
+
+        gl_FragColor = color * colorTex;//vec4(0.5*color.g,0.0*color.g,0.0*color.g,color.a);
     }
     
 </script>

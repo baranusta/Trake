@@ -1,9 +1,10 @@
 var dummyPart = { draw: function () { }, shrink: function () { } };
 class Snake {
 
-    constructor(name, startPoint, direction) {
+    constructor(name, startPoint, direction, color) {
         this.name = name;
         this.speed = 0.002;
+        this.color = color;
 
 
         var length = snakeInitialLength;
@@ -32,10 +33,11 @@ class Snake {
     }
 
     draw(frame) {
+        var color = this.color;
         this.parts.forEach(function (part) {
-            part.draw(frame);
+            part.draw(frame,color);
         });
-        this.head.draw(frame);
+        this.head.draw(frame,color);
     }
 
     getCollider() {

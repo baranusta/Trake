@@ -1,7 +1,15 @@
 class Rectangle {
-
     constructor(vertexShaderName, fragmenShaderName) {
         this.program = initShaders(gl, vertexShaderName, fragmenShaderName);
+
+        this.program.viewSize = gl.getUniformLocation(this.program, 'viewSize');
+        this.program.displacement = gl.getUniformLocation(this.program, 'displacement');
+        this.program.orientation = gl.getUniformLocation(this.program, 'orientation');
+        this.program.offset = gl.getUniformLocation(this.program, 'offset');
+        this.program.length = gl.getUniformLocation(this.program, 'length');
+        this.program.width = gl.getUniformLocation(this.program, 'width');
+        this.program.end = gl.getUniformLocation(this.program, 'end');
+        this.program.color = gl.getUniformLocation(this.program, 'color');
 
         this.vao = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vao);
@@ -37,7 +45,7 @@ class Rectangle {
             gl.STATIC_DRAW);
     }
 
-    draw(frame, width, length, displacement, direction) {
+    draw(frame, width, length, displacement, direction, color) {
         gl.useProgram(this.program);
         gl.uniform1i(this.program.orientation, isHorizontal(direction));
 
@@ -49,6 +57,13 @@ class Rectangle {
         gl.uniform2f(this.program.displacement,
             displacement[0],
             displacement[1]
+        );
+
+        gl.uniform4f(this.program.color,
+            color[0],
+            color[1],
+            color[2],
+            color[3]
         );
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vao);
