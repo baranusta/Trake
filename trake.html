@@ -31,7 +31,7 @@
 </script>
 <script id="snake-fragment-shader" type="x-shader/x-fragment">
     
-    uniform mediump vec2 end;
+    uniform mediump vec2 partHeadPos;
     uniform mediump vec2 viewSize;
     uniform mediump float width;
     uniform mediump vec4 color;
@@ -43,7 +43,7 @@
     void main() { 
 
         highp vec2 normalizedFragCoord = (gl_FragCoord.xy/viewSize) * 2.0 -1.0;
-        highp vec2 dif = normalizedFragCoord - end;
+        highp vec2 dif = normalizedFragCoord - partHeadPos;
         dif.x *= viewSize.x / viewSize.y;
         highp float c = 0.4;
         // //Horizontal
@@ -55,7 +55,7 @@
             else
                 c = dist / width * 2.0;
         }
-        else if(abs(dif.y) > width * 2.0 * viewSize.x / viewSize.y){
+        else if(orientation == 0 && abs(dif.y) > width * 2.0 * viewSize.x / viewSize.y){
             mediump float x = sin(dif.y * 80.0 + float(offset) / 8.0) * (width * 0.6* viewSize.x / viewSize.y );
             highp float dist = dif.x - x;
             if( abs(dist) > width* viewSize.x / viewSize.y)

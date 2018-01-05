@@ -1,90 +1,116 @@
 
 class SnakePart extends Rectangle {
 
-    constructor(name, center, size, direction, color) {
+    constructor(name, tail_pos, size, direction, color) {
         super('snake-vertex-shader', 'snake-fragment-shader');
-
         this.name = name;
-        this.displacement = center;
         this.direction = direction;
-        this.length = size[1];
-        this.width = size[0];
+        this.center = vec2(tail_pos);
+        this.startPos = vec2(tail_pos);
 
-        if (isHorizontal(direction)) {
-            this.length /= aspectRatio;
-        } else {
-            this.width /= aspectRatio;
+        console.log(size);
+        switch (this.direction) {
+            case DIRECTION.EAST:
+                this.center[0] = this.startPos[0] + size[1] / 2.0;
+                this.startPos[0] += size[1];
+                
+                this.size = { 0: size[1], 1: size[0] };
+                this.lengthVar = 0;
+                this.widthVar = 1;
+                break;
+            case DIRECTION.WEST:
+                this.center[0] = this.startPos[0] - size[1] / 2.0;
+                this.startPos[0] -= size[1];
+                this.size = { 0: size[1], 1: size[0] };
+                this.lengthVar = 0;
+                this.widthVar = 1;
+                break;
+            case DIRECTION.NORTH:
+                this.center[1] = this.startPos[1] + size[1] / 2.0;
+                this.startPos[1] += size[1];
+                this.size = { 0: size[0], 1: size[1] };
+                this.lengthVar = 1;
+                this.widthVar = 0;
+                break;
+            case DIRECTION.SOUTH:
+                this.center[1] = this.startPos[1] - size[1] / 2.0;
+                this.startPos[1] -= size[1];
+                this.size = { 0: size[0], 1: size[1] };
+                this.lengthVar = 1;
+                this.widthVar = 0;
+                break;
         }
+        this.collisionBox = new Box(this.center, this.size);
 
-        this.collisionBox = new Box(this.displacement, size);
+    }
+
+    getLength() {
+        if (isHorizontal(this.direction))
+            return this.size[this.lengthVar] * aspectRatio;
+        return this.size[this.lengthVar];
     }
 
     draw(frame, color) {
 
         gl.useProgram(this.program);
         {
-            let end = vec2(0);
             let offset = frame;
-            let constant = 1 / 2.0;
             if (!isPositiveDir(this.direction)) {
                 offset *= -1;
-                constant *= -1;
-            }
-            if (isHorizontal(this.direction)) {
-                end[0] = this.displacement[0] - this.length * constant;
-                end[1] = this.displacement[1];
-            }
-            else {
-                end[1] = this.displacement[1] - this.length * constant;
-                end[0] = this.displacement[0];
             }
 
-            gl.uniform2f(this.program.end,
-                end[0],
-                end[1]
+            gl.uniform2f(this.program.partHeadPos,
+                this.startPos[0],
+                this.startPos[1]
             );
             gl.uniform1i(this.program.offset, offset);
         }
-        super.draw(frame, this.width, this.length, this.displacement, this.direction, color);
+        super.draw(frame, this.size[this.widthVar], this.size[this.lengthVar], this.center, this.direction, color);
     }
 
     grow(speed) {
-        this.length += speed;
+        this.size[this.lengthVar] += speed;
+        switch (this.direction) {
+            case DIRECTION.EAST:
+                this.startPos[0] += speed;
+                break;
+            case DIRECTION.WEST:
+                this.startPos[0] -= speed;
+                break;
+            case DIRECTION.NORTH:
+                this.startPos[1] += speed;
+                break;
+            case DIRECTION.SOUTH:
+                this.startPos[1] -= speed;
+                break;
+        }
     }
 
     shrink(speed) {
-        this.length -= speed;
+        this.size[this.lengthVar] -= speed;
+
     }
 
     move(speed, updateSize) {
         switch (this.direction) {
             case DIRECTION.EAST:
                 speed /= aspectRatio;
-                this.displacement[0] += speed / 2.0;
+                this.center[0] += speed / 2.0;
                 break;
             case DIRECTION.WEST:
                 speed /= aspectRatio;
-                this.displacement[0] -= speed / 2.0;
+                this.center[0] -= speed / 2.0;
                 break;
             case DIRECTION.NORTH:
-                this.displacement[1] += speed / 2.0;
+                this.center[1] += speed / 2.0;
                 break;
             case DIRECTION.SOUTH:
-                this.displacement[1] -= speed / 2.0;
+                this.center[1] -= speed / 2.0;
                 break;
         }
         if (updateSize > 0)
             this.grow(speed);
         else
             this.shrink(speed);
-
-        var boxSize;
-        if (isHorizontal(this.direction)) {
-            boxSize = [this.length / aspectRatio, this.width];
-        }
-        else {
-            boxSize = [this.width / aspectRatio, this.length];
-        }
-        this.collisionBox = new Box(this.displacement, boxSize);
     }
 }

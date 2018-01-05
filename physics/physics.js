@@ -1,5 +1,6 @@
 class Physics {
     static parameterCheck(outer, inner) {
+        //console.log(outer.sizeX);
         if (!!outer && !!inner && outer instanceof Box && inner instanceof Box)
             return true;
         return false;
@@ -7,8 +8,10 @@ class Physics {
 
     static isCompletelyInside(outer, inner) {
         if(this.parameterCheck(outer, inner)){
-            if(outer.xMin< inner.xMin && outer.xMax > inner.xMax
-                && outer.yMin< inner.yMin && outer.yMax > inner.yMax)
+            if(outer.center[0] - outer.size[0]/2.0 < inner.center[0] - inner.size[0]/2.0 && 
+                outer.center[0] + outer.size[0]/2.0 > inner.center[0] + inner.size[0]/2.0 && 
+                outer.center[1] - outer.size[1]/2.0 < inner.center[1] - inner.size[1]/2.0 && 
+                outer.center[1] + outer.size[1]/2.0 > inner.center[1] + inner.size[1]/2.0)
                 return true;
             return false;
         }
@@ -17,8 +20,10 @@ class Physics {
 
     static isCompletelyOutside(outer, inner) {
         if(this.parameterCheck(outer, inner)){
-            if(outer.xMin> inner.xMax || outer.xMax < inner.xMin
-                || outer.yMin> inner.yMax || outer.yMax < inner.yMin)
+            if(outer.center[0] - outer.size[0]/2.0 > inner.center[0] + inner.size[0]/2.0 || 
+                outer.center[0] + outer.size[0]/2.0 < inner.center[0] - inner.size[0]/2.0 || 
+                outer.center[1] - outer.size[1]/2.0 > inner.center[1] + inner.size[1]/2.0 || 
+                outer.center[1] + outer.size[1]/2.0 < inner.center[1] - inner.size[1]/2.0)
                 return true;
             return false;
         }
@@ -33,9 +38,11 @@ class Physics {
 
 class Box {
     constructor(center, size) {
-        this.xMin = center[0] - size[0]/2.0;
-        this.yMin = center[1] - size[1]/2.0;
-        this.xMax = center[0] + size[0]/2.0;
-        this.yMax = center[1] + size[1]/2.0;
+        this.center = center; 
+        this.size = size; 
+        // this.xMin = center[0] - size[0]/2.0;
+        // this.yMin = center[1] - size[1]/2.0;
+        // this.xMax = center[0] + size[0]/2.0;
+        // this.yMax = center[1] + size[1]/2.0;
     }
 }

@@ -8,28 +8,39 @@ class Snake {
 
 
         var length = snakeInitialLength;
-        var center = vec2(startPoint);
+        var size = [snakeWidth, snakeInitialLength];
+        var headSize = vec2(snakeHeadSize);
+        var tailPos = vec2(startPoint);
         switch (direction) {
             case DIRECTION.EAST:
-                center[0] -= length / 2.0;
+            tailPos[0] -= length / aspectRatio;
+            size[1] /= aspectRatio;
+            headSize[1] /= aspectRatio;
                 break;
             case DIRECTION.WEST:
-                center[0] += length / 2.0;
+            tailPos[0] += length / aspectRatio;
+            size[1] /= aspectRatio;
+            headSize[1] /= aspectRatio;
                 break;
             case DIRECTION.NORTH:
-                center[1] -= length / 2.0;
+            tailPos[1] -= length;
+            size[0] /= aspectRatio;
+            headSize[0] /= aspectRatio;
                 break;
             case DIRECTION.SOUTH:
-                center[1] += length / 2.0;
+            tailPos[1] += length;
+            size[0] /= aspectRatio;
+            headSize[0] /= aspectRatio;
                 break;
         }
-        this.parts = [new SnakePart("0", center, [snakeWidth, length], direction)];
+
+        this.parts = [new SnakePart("0", tailPos, size, direction)];
         this.i_first = 0;
         this.i_last = 0;
-        this.head = new SnakeHead(startPoint, [0.1, 0.1], direction);
-        this.head.move(0);
+        
+        this.head = new SnakeHead(startPoint, headSize, direction);
         this.head.changeDirection(direction);
-        this.changingLength = this.parts[this.i_last].length;
+        this.changingLength = this.parts[this.i_last].getLength();
     }
 
     draw(frame) {
@@ -41,13 +52,10 @@ class Snake {
     }
 
     getCollider() {
-        return this.head.collider;
+        return this.parts[this.i_first].collisionBox;
     }
 
     eachCollisionBox(func) {
-        if (!func(this.head.collider))
-            return;
-
         this.parts.forEach(function (part) {
             if (!func(part.collisionBox)) {
                 return;
@@ -56,9 +64,7 @@ class Snake {
     }
 
     isFirstPartsCollisionBox(collisionBox) {
-        if (this.head.collider === collisionBox || collisionBox === this.parts[this.i_first].collisionBox)
-            return true;
-        if (this.parts.length >= 2 && collisionBox === this.parts[this.i_first - 1].collisionBox)
+        if (collisionBox === this.parts[this.i_first].collisionBox)
             return true;
         return false;
     }
@@ -67,27 +73,20 @@ class Snake {
         this.head.move(this.speed);
 
         this.parts[this.i_first].move(this.speed, 1);
-        let length = this.parts[this.i_first].length;
+        let length = this.parts[this.i_first].getLength();
         if (this.i_first !== this.i_last)
-            length += this.parts[this.i_last].length;
-        if (length > this.changingLength)
+            length += this.parts[this.i_last].getLength();
+        if (length >= this.changingLength)
             this.parts[this.i_last].move(this.speed, -1);
 
-        if (this.parts[this.i_last].length <= 0) {
+        if (this.parts[this.i_last].getLength() <= 0) {
             this.parts.splice(this.i_last, 1);
-            this.i_first--;
-            this.changingLength = this.parts[this.i_last].length;
+            this.i_first = this.parts.length - 1;
+            this.changingLength = this.parts[this.i_last].getLength();
         }
     }
 
     turn(isRight) {
-
-        // if((isHorizontal(this.parts[this.i_first].direction) && this.parts[this.i_first].length < snakeWidth * 2 / aspectRatio)
-        //     || this.parts[this.i_first].length < snakeWidth * 2)
-        // {
-        //     return;
-        // }
-
         var direction;
         if (isRight)
             direction = this.parts[this.i_first].direction + 1;
@@ -96,25 +95,33 @@ class Snake {
             direction += DIRECTION.COUNT;
         }
         direction %= DIRECTION.COUNT;
-        var startPoint = vec2(this.parts[this.i_first].displacement[0], this.parts[this.i_first].displacement[1]);
-
+        var startPoint = vec2(this.parts[this.i_first].center[0], this.parts[this.i_first].center[1]);
+        var headStartPoint = vec2(startPoint);
+        var size = [snakeWidth, snakeWidth * 2.0]; 
         {
             let constant = isPositiveDir(this.parts[this.i_first].direction) ? +1 / 2.0 : -1 / 2.0;
             if (isHorizontal(this.parts[this.i_first].direction)) {
-                startPoint[0] += (this.parts[this.i_first].length + 2.0 * snakeWidth / aspectRatio) * constant;
-                startPoint[1] -= snakeWidth * (isPositiveDir(direction) ? +1 : -1);
+                size[0] /= aspectRatio;
+                startPoint[0] += (this.parts[this.i_first].getLength() - 2.0 * snakeWidth) * constant / aspectRatio ;
+                startPoint[1] += snakeWidth * (isPositiveDir(direction) ? +1 : -1);
+                headStartPoint = vec2(startPoint);
+                headStartPoint[1] += size[1]* (isPositiveDir(direction) ? +1 : -1);
             }
             else {
-                startPoint[0] -= snakeWidth * (isPositiveDir(direction) ? +1 : -1) / aspectRatio;
-                startPoint[1] += (this.parts[this.i_first].length + 2.0 * snakeWidth) * constant;
+                size[1] /= aspectRatio;
+                startPoint[0] += snakeWidth * (isPositiveDir(direction) ? +1 : -1) / aspectRatio;
+                startPoint[1] += (this.parts[this.i_first].getLength() - 2.0 * snakeWidth) * constant;
+                headStartPoint = vec2(startPoint);
+                headStartPoint[0] += size[0] * (isPositiveDir(direction) ? +1 : -1) ;
             }
         }
+        
         this.head.changeDirection(direction);
-        this.head.setStartPoint(startPoint);
+        this.head.setStartPoint(headStartPoint);
         if (this.i_last !== this.i_first)
-            this.changingLength = this.changingLength - this.parts[this.i_first].length;
+            this.changingLength = this.changingLength - this.parts[this.i_first].getLength() - size[1];
 
-        this.parts.push(new SnakePart("P_1", startPoint, [snakeWidth, 0.0], direction));
+        this.parts.push(new SnakePart("P_1", startPoint, size, direction));
         this.i_first = this.parts.length - 1;
 
     }

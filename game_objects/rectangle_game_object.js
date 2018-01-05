@@ -5,6 +5,7 @@ class RectangleGameObject {
         this.direction = direction;
         this.size = size;
         this.resized_size = vec2(this.size);
+        console.log(this.size);
 
         this.rectangle.program.frequency = gl.getUniformLocation(this.rectangle.program, 'frequency');
         this.collider = new Box(this.displacement, this.resized_size);
@@ -17,11 +18,11 @@ class RectangleGameObject {
     move(direction, speed) {
         switch (direction) {
             case DIRECTION.EAST:
-                speed = (speed * viewSize[1] / viewSize[0]);
+                speed /= aspectRatio;
                 this.displacement[0] += speed;
                 break;
             case DIRECTION.WEST:
-                speed = (speed * viewSize[1] / viewSize[0]);
+                speed /= aspectRatio;
                 this.displacement[0] -= speed;
                 break;
             case DIRECTION.NORTH:
@@ -32,14 +33,13 @@ class RectangleGameObject {
                 break;
         }
 
-        if (isHorizontal(direction)) {
-            this.resized_size = vec2(this.size[1], this.size[0]);
-            this.resized_size[0] *= viewSize[1] / viewSize[0];
-        }
-        else {
-            this.resized_size = vec2(this.size[0], this.size[1]);
-            this.resized_size[0] *= viewSize[1] / viewSize[0];
-        }
-        this.collider = new Box(this.displacement, this.resized_size);
+        // if (isHorizontal(direction)) {
+        //     this.resized_size = vec2(this.size[1], this.size[0]);
+        //     this.resized_size[1] /= aspectRatio;
+        // }
+        // else {
+        //     this.resized_size = vec2(this.size[0], this.size[1]);
+        //     this.resized_size[1] /= aspectRatio;
+        // }
     }
 }

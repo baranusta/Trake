@@ -8,7 +8,7 @@ class Rectangle {
         this.program.offset = gl.getUniformLocation(this.program, 'offset');
         this.program.length = gl.getUniformLocation(this.program, 'length');
         this.program.width = gl.getUniformLocation(this.program, 'width');
-        this.program.end = gl.getUniformLocation(this.program, 'end');
+        this.program.partHeadPos = gl.getUniformLocation(this.program, 'partHeadPos');
         this.program.color = gl.getUniformLocation(this.program, 'color');
 
         this.vao = gl.createBuffer();
