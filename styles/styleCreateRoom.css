@@ -1,0 +1,40 @@
+
+
+form {
+
+    position: absolute;
+    width:300px;
+    top: 50%;
+    left: 50%;
+    margin: -400px 0 0 -150px;
+    background: rgb(230, 213, 213);
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    position: relative;
+    background-color: rgb(233, 250, 233);
+    padding: 12px 20px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    margin-left: -45px;
+    left: 50%;
+    display: block;
+    cursor: pointer;
+}
+
+input[type=text], select, input, textarea{
+    width: 170px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 30px;
+    resize: vertical;
+}
+
+
+form .formInput {
+    margin: 10px;
+    display: inline-block;
+}

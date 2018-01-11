@@ -8,7 +8,7 @@ class SnakePart extends Rectangle {
         this.center = vec2(tail_pos);
         this.startPos = vec2(tail_pos);
 
-        console.log(size);
+        //console.log(size);
         switch (this.direction) {
             case DIRECTION.EAST:
                 this.center[0] = this.startPos[0] + size[1] / 2.0;

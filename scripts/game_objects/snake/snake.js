@@ -15,12 +15,12 @@ class Snake {
             case DIRECTION.EAST:
             tailPos[0] -= length / aspectRatio;
             size[1] /= aspectRatio;
-            headSize[1] /= aspectRatio;
+            headSize[0] /= aspectRatio;
                 break;
             case DIRECTION.WEST:
             tailPos[0] += length / aspectRatio;
             size[1] /= aspectRatio;
-            headSize[1] /= aspectRatio;
+            headSize[0] /= aspectRatio;
                 break;
             case DIRECTION.NORTH:
             tailPos[1] -= length;
@@ -97,7 +97,7 @@ class Snake {
         direction %= DIRECTION.COUNT;
         var startPoint = vec2(this.parts[this.i_first].center[0], this.parts[this.i_first].center[1]);
         var headStartPoint = vec2(startPoint);
-        var size = [snakeWidth, snakeWidth * 2.0]; 
+        var size = [snakeWidth, snakeWidth * 2]; 
         {
             let constant = isPositiveDir(this.parts[this.i_first].direction) ? +1 / 2.0 : -1 / 2.0;
             if (isHorizontal(this.parts[this.i_first].direction)) {

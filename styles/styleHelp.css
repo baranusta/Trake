@@ -1,0 +1,18 @@
+
+.helpScreen{
+    position: absolute;
+    width:600px;
+    top: 50%;
+    left: 50%;
+    margin: -400px 0 0 -300px;
+    padding: 30px;
+    background: rgb(230, 213, 213);
+    box-sizing: border-box;
+}
+
+.helpScreen table{
+    table-layout: fixed;
+    width: 100%;
+    border-collapse:separate; 
+    border-spacing:10px;
+}

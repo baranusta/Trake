@@ -19,8 +19,9 @@ class SnakeHead extends RectangleGameObject {
     setStartPoint(startPoint){
         this.displacement = vec2(startPoint);
 
+        console.log(this.resized_size);
         if(isHorizontal(this.direction))
-            super.move(this.direction, -this.resized_size[0]/2);
+            super.move(this.direction, (-this.resized_size[0]/2)*aspectRatio );
         else
             super.move(this.direction, -this.resized_size[1]/2);
     }

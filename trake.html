@@ -2,10 +2,23 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <title>Trake</title>
+    <link href="style/game.css" rel="stylesheet">
+    <link href="style/welcome.css" rel="stylesheet">
+    <link href="style/lobby.css" rel="stylesheet">
+    <link href="style/styleCreateRoom.css" rel="stylesheet">
+    <link href="style/styleHelp.css" rel="stylesheet">
+    <style>
+        .outDiv {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 
-<script id="snake-vertex-shader" type="x-shader/x-vertex">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script id="snake-vertex-shader" type="x-shader/x-vertex">
     attribute vec2 vPosition;
 
     uniform mediump vec2 displacement;
@@ -29,7 +42,7 @@
         gl_Position = vec4(pos + displacement,0.0,1.0); 
     }
 </script>
-<script id="snake-fragment-shader" type="x-shader/x-fragment">
+    <script id="snake-fragment-shader" type="x-shader/x-fragment">
     
     uniform mediump vec2 partHeadPos;
     uniform mediump vec2 viewSize;
@@ -68,7 +81,7 @@
     
 </script>
 
-<script id="rectangle-vertex-shader" type="x-shader/x-vertex">
+    <script id="rectangle-vertex-shader" type="x-shader/x-vertex">
     attribute vec2 vPosition;
 
     uniform mediump vec2 displacement;
@@ -79,8 +92,6 @@
     attribute vec2 uvTexture;
     varying mediump vec2 texCoord;
 
-    uniform lowp int orientation;
-    uniform sampler2D uSampler;
 
     void main() { 
         //Horizontal
@@ -89,54 +100,160 @@
         pos[0] *= width;
         pos[1] *= length;
         texCoord = uvTexture;
-        uSampler;
         gl_Position = vec4(pos + displacement,0.0,1.0); 
     }
 </script>
 
-<script id="rectangle-fragment-shader" type="x-shader/x-fragment">
+    <script id="rectangle-fragment-shader" type="x-shader/x-fragment">
     
     uniform sampler2D uSampler;
     uniform mediump vec2 viewSize;
     uniform mediump vec4 color;
 
-    uniform lowp int orientation;
     varying mediump vec2 texCoord;
 
-    void main() { 
-        mediump vec4 colorTex = texture2D(uSampler, texCoord);
+    // 0 = texture, 1 = color, 2 = shadershow
+    uniform lowp int renderType;
 
-        gl_FragColor = color * colorTex;//vec4(0.5*color.g,0.0*color.g,0.0*color.g,color.a);
+    void main() { 
+        if(renderType == 0)
+        {
+            mediump vec4 colorTex = texture2D(uSampler, texCoord);
+            gl_FragColor = color * colorTex;
+        }
+        else if(renderType == 1)
+        {
+            gl_FragColor = color;
+        }
     }
     
 </script>
+    <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
+    <script type="text/javascript" src="scripts/common/webgl-utils.js"></script>
+    <script type="text/javascript" src="scripts/common/initShaders.js"></script>
+    <script type="text/javascript" src="scripts/common/MV.js"></script>
+    <script type="text/javascript" src="scripts/globals.js"></script>
+    <script type="text/javascript" src="scripts/direction.js"></script>
+    <script type="text/javascript" src="scripts/physics/physics.js"></script>
 
+    <script type="text/javascript" src="scripts/render/rectangle.js"></script>
+    <script type="text/javascript" src="scripts/game_objects/rectangle_game_object.js"></script>
 
-<script type="text/javascript" src="Common/webgl-utils.js"></script>
-<script type="text/javascript" src="Common/initShaders.js"></script>
-<script type="text/javascript" src="Common/MV.js"></script>
-<script type="text/javascript" src="globals.js"></script>
-<script type="text/javascript" src="direction.js"></script>
-<script type="text/javascript" src="physics/physics.js"></script>
+    <script type="text/javascript" src="scripts/game_objects/snake/snake_head.js"></script>
+    <script type="text/javascript" src="scripts/game_objects/snake/snake_part.js"></script>
+    <script type="text/javascript" src="scripts/game_objects/snake/snake.js"></script>
 
-<script type="text/javascript" src="render/rectangle.js"></script>
-<script type="text/javascript" src="game_objects/rectangle_game_object.js"></script>
+    <script type="text/javascript" src="scripts/game_objects/collectible/collectible.js"></script>
+    <script type="text/javascript" src="scripts/game_objects/collectible/collectibleFactory.js"></script>
 
-<script type="text/javascript" src="game_objects/snake/snake_head.js"></script>
-<script type="text/javascript" src="game_objects/snake/snake_part.js"></script>
-<script type="text/javascript" src="game_objects/snake/snake.js"></script>
-
-<script type="text/javascript" src="game_objects/collectible/collectible.js"></script>
-<script type="text/javascript" src="game_objects/collectible/collectibleFactory.js"></script>
-
-<script type="text/javascript" src="trake.js"></script>
+    <script type="text/javascript" src="scripts/game.js"></script>
+    <script type="text/javascript" src="scripts/views/game_prep_view.js"></script>
+    <script type="text/javascript" src="scripts/views/create_room_view.js"></script>
+    <script type="text/javascript" src="scripts/trake.js"></script>
+    <script type="text/javascript" src="scripts/views/lobby_view.js"></script>
 
 </head>
 
 <body>
-    <canvas id="gl-canvas" width="1028" height="512">
-        Oops ... your browser doesn't support the HTML5 canvas element
-    </canvas>
+    <div class="welcomeScreen">
+        <input id="nick" name="nick" type="text" placeholder="nick" required />
+        <button type="button" onclick="enterLobby()">Multi player</button>
+        <button type="button" onclick="startSinglePlayer()">Single player</button>
+    </div>
+    <div class="lobbyScreen">
+        <div class="buttons">
+            <button type="button" onclick="openCreateRoomView()">Create a New Room</button>
+            <button type="button" onclick="joinRoom()">Join to a room!</button>
+            <button id="help" type="button" onclick="showHelp()">How to</button>
+        </div>
+        <table id="rooms">
+            <tr>
+                <th>Room Name</th>
+                <th>Created By</th>
+                <th>Players</th>
+            </tr>
+        </table>
+    </div>
+    <div class="createRoomScreen">
+        <div class="outDiv" onclick="divOutClicked()"></div>
+        <form action="javascript:;" onsubmit="createRoom(this)">
+            <div class="formInput">
+                Room Name:
+                <input type="text" name="RoomName" value="" maxlength="10">
+                <br>
+            </div>
+
+            <div class="formInput">
+                Player Count:
+                <input type="text" name="PlayerCount" value="" maxlength="1">
+                <br>
+            </div>
+            <input type="submit" value="Create">
+        </form>
+    </div>
+    <div class="helpScreenContainer">
+        <div class="outDiv" onclick="divOutClicked()"></div>
+        <div class="helpScreen" onclick="divOutClicked()">
+            <h1>
+                Trake
+            </h1>
+            It is a multiplayer snake game
+            <h2>
+                Controls
+            </h2>
+            <table>
+                <tr>
+                    <td>Right arrow</td>
+                    <td>Snake turns right</td>
+                </tr>
+                <tr>
+                    <td>Left arrow</td>
+                    <td>Snake turns left</td>
+                </tr>
+                <tr>
+                    <td>Space</td>
+                    <td>Use the special power</td>
+                </tr>
+            </table>
+            <h2>
+                Power Ups
+            </h2>
+            <table>
+                <tr>
+                    <td valign="top">bate</td>
+                    <td valign="top">snake grows 1 unit</td>
+                </tr>
+                <tr>
+                    <td valign="top">speed up</td>
+                    <td valign="top">gains limited time of speed. Press space to use!</td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+    <div class="gamePrepScreen" style="position: absolute; background:rgb(247, 171, 171); height:100%; width:100%">
+        <h2>Game Starts when everybody is ready.</h2>
+        <button type="button" id="readyBtn" onclick="ready()">Ready</button>
+        <button type="button" class="quitBtn" onclick="quit()">Quit</button>
+
+    </div>
+    <div class="gameScreen">
+        <div class="game">
+            <canvas id="gl-canvas" width="1028" height="512">
+                Oops ... your browser doesn't support the HTML5 canvas element
+            </canvas>
+            <h3 id="score">Score: </h3>
+            <ol id="playingPlayers">
+                <!-- <li style="color:blue;">Coffee</li> -->
+            </ol>
+        </div>
+        <div id="post_game">
+            <h1 id='score_head'>score</h1>
+            <button type="button" id="playAgainBtn" onclick="playAgain()">Play Again</button>
+            <button type="button" class="quitRoom" onclick="quitRoom()">Continue</button>
+        </div>
+
+    </div>
 </body>
 
 </html>

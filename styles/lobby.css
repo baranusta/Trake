@@ -1,0 +1,60 @@
+.lobbyScreen{
+    
+    position: absolute;
+    width:800px;
+    top: 50%;
+    left: 50%;
+    margin: -450px 0 0 -400px;
+    background: red;
+    box-sizing: border-box;
+    border:2px solid blue;
+}
+
+button{
+    position: relative;
+    margin: 12px 12px 0px 12px;
+    height: 40px;
+}
+
+.buttons{
+    position: relative;
+    top:38px;
+    width:15%;
+    height:300px;
+    box-sizing: border-box;
+    float:left;
+}
+
+.buttons #help{
+    position: relative;
+    height: 40px;
+    top: 95px;
+}
+
+#rooms tbody th{
+    text-align: center;
+    background-color: red; 
+}
+
+#rooms tbody tr {
+    text-align: center;
+    background-color: white;
+    color:black; 
+    cursor: pointer;
+}
+
+#rooms tr:hover {
+    background-color: rgb(245, 96, 96);
+}
+
+.selected{
+    background-color: rgb(134, 79, 79);
+}
+
+#rooms{
+    left: 12px;
+    width:80%;
+    top: 20px;
+    float:left;
+    position: relative;
+ }
