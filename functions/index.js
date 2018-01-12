@@ -1,4 +1,4 @@
-
+const functions = require('firebase-functions');
 var logger = require('./server/logger.js');
 
 const express = require('express')
@@ -17,9 +17,9 @@ var pusher = new Pusher({
   cluster: 'eu',
   encrypted: true
 });
-app.use(express.static(__dirname + "/public"));
+app.use('/public',express.static(__dirname + "/public"));
 app.use('/scripts', express.static(__dirname + '/scripts'));
-app.use('/style', express.static(__dirname + '/styles'));
+app.use('/styles', express.static(__dirname + '/styles'));
 //app.use('/images', express.static(__dirname + '/scripts'));
 // // Body parser middleware
 app.use(bodyParser.json())
@@ -40,9 +40,9 @@ app.use((req, res, next) => {
 })
 
 // Index API route for the Express app
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/trake.html');
-})
+// app.get('/', (req, res) => {
+//   res.sendFile('index.html');
+// })
 
 app.get('/rooms', (req, res) => {
   logger.info(rooms);
@@ -160,3 +160,11 @@ pusher.trigger('presence-my-channel', 'my-event', {
 pusher.trigger('lobby', 'my-event', {
   "message": "hello world"
 });
+
+exports.app = functions.https.onRequest(app);
+// // Create and Deploy Your First Cloud Functions
+// // https://firebase.google.com/docs/functions/write-firebase-functions
+//
+// exports.helloWorld = functions.https.onRequest((request, response) => {
+//  response.send("Hello from Firebase!");
+// });

@@ -64,7 +64,7 @@ var gameStart = function (playerCount, playerId) {
     player = snakes[playerId];
     playerIndex = playerId;
     //http://localhost:8000/snake-head.png
-    loadTexture(gl, "http://localhost:8000/snake-head.png", function (texture) {
+    loadTexture(gl, "https://trake-cc1ed.firebaseapp.com/snake-head.png", function (texture) {
         gameLoop();
         for (var i = 0, len = snakes.length; i < len; i++) {
             snakes[i].head.addTexture(texture)
@@ -85,6 +85,24 @@ var gameStart = function (playerCount, playerId) {
     }
 }
 
+// {
+//     "name": "trake",
+//     "version": "1.0.0",
+//     "description": "trakessel",
+//     "main": "server.js",
+//     "dependencies": {
+//       "pusher": "^1.5.1",
+//       "winston": "^3.0.0-rc1"
+//     },
+//     "devDependencies": {},
+//     "scripts": {
+//       "test": "echo \"Error: no test specified\" && exit 1",
+//       "start": "node server.js"
+//     },
+//     "author": "baranusta",
+//     "license": "ISC"
+//   }
+  
 const gameLoop = function () {
     gl.clear(gl.COLOR_BUFFER_BIT);
     frame++;
