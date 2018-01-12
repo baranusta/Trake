@@ -32,7 +32,7 @@ var enterLobby = function () {
 
 var startSinglePlayer = function () {
     var nick = $('#nick').val();
-    if (nick.length== 0) {
+    if (nick.length > 0) {
         $('.gameScreen').show();
         $('.welcomeScreen').hide();
         gameStart(1, 0);
@@ -57,7 +57,9 @@ window.onload = function () {
     $('.createRoomScreen').hide();
     $('.helpScreenContainer').hide();
     $('.gamePrepScreen').hide();
-    startSinglePlayer();
+    $('.gamePrepScreen').hide();
+    $('.gameScreen').hide();
+    //startSinglePlayer();
 }
 
 var _wasPageCleanedUp = false;

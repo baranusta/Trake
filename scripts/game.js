@@ -63,6 +63,7 @@ var gameStart = function (playerCount, playerId) {
     }
     player = snakes[playerId];
     playerIndex = playerId;
+    //http://localhost:8000/snake-head.png
     loadTexture(gl, "http://localhost:8000/snake-head.png", function (texture) {
         gameLoop();
         for (var i = 0, len = snakes.length; i < len; i++) {
@@ -78,12 +79,9 @@ var gameStart = function (playerCount, playerId) {
                 sendEvent("bait", { position: bait.displacement });
             }
         }, 7000));
-        if (isMultiPlayer) {
-
-            intervals.push(window.setInterval(function () {
-                collectibles.push(CollectibleFactory.getCollectible(snakes));
-            }, 30000));
-        }
+        intervals.push(window.setInterval(function () {
+            collectibles.push(CollectibleFactory.getCollectible(snakes));
+        }, 30000));
     }
 }
 

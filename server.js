@@ -147,7 +147,7 @@ app.post('/pusher/auth', (req, res) => {
 })
 
 // Set port to be used by Node.js
-app.set('port', (8000))
+app.set('port', (process.env.port||8000))
 
 app.listen(app.get('port'), () => {
   logger.info('Started.');
