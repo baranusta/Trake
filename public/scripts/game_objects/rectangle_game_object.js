@@ -5,7 +5,6 @@ class RectangleGameObject {
         this.direction = direction;
         this.size = size;
         this.resized_size = vec2(this.size);
-        console.log(this.size);
 
         this.rectangle.program.frequency = gl.getUniformLocation(this.rectangle.program, 'frequency');
         this.collider = new Box(this.displacement, this.resized_size);

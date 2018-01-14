@@ -63,8 +63,11 @@ var gameStart = function (playerCount, playerId) {
     }
     player = snakes[playerId];
     playerIndex = playerId;
-    //http://localhost:8000/snake-head.png
-    loadTexture(gl, "https://trake-cc1ed.firebaseapp.com/snake-head.png", function (texture) {
+    
+    var url = "https://trake-cc1ed.firebaseapp.com/snake-head.png";
+    if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+        url = "http://localhost:5000/snake-head.png"
+    loadTexture(gl, url, function (texture) {
         gameLoop();
         for (var i = 0, len = snakes.length; i < len; i++) {
             snakes[i].head.addTexture(texture)
@@ -81,27 +84,9 @@ var gameStart = function (playerCount, playerId) {
         }, 7000));
         intervals.push(window.setInterval(function () {
             collectibles.push(CollectibleFactory.getCollectible(snakes));
-        }, 30000));
+        }, 5000));
     }
 }
-
-// {
-//     "name": "trake",
-//     "version": "1.0.0",
-//     "description": "trakessel",
-//     "main": "server.js",
-//     "dependencies": {
-//       "pusher": "^1.5.1",
-//       "winston": "^3.0.0-rc1"
-//     },
-//     "devDependencies": {},
-//     "scripts": {
-//       "test": "echo \"Error: no test specified\" && exit 1",
-//       "start": "node server.js"
-//     },
-//     "author": "baranusta",
-//     "license": "ISC"
-//   }
   
 const gameLoop = function () {
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -115,8 +100,7 @@ const gameLoop = function () {
             checkPlayerCollision(i, snakes, collectibles);
             snakes[i].draw(frame);
             if (move) {
-                snakes[i].update();
-                //player_2.update();            
+                snakes[i].update();  
             }
         }
         if (!!bait) bait.draw(frame)
@@ -146,9 +130,8 @@ const checkPlayerCollision = function (playerInConcernIndex, players, collectibl
 
     for (let i = 0; i < collectibles.length; i++) {
         const collectible = collectibles[i];
-        if (Physics.isColliding(collectible.collider, players[playerInConcernIndex].getCollider())) {
-            console.log("player" + playerInConcernIndex + " collected");
-            collectible.apply(players[playerInConcernIndex]);
+        if (!players[playerInConcernIndex].power && Physics.isColliding(collectible.collider, players[playerInConcernIndex].getCollider())) {
+            players[playerInConcernIndex].power = collectible;
             collectibles.splice(i, 1);
             break;
         }
@@ -195,7 +178,6 @@ const checkPlayerCollision = function (playerInConcernIndex, players, collectibl
 
 var move = true;
 document.onkeydown = function (e) {
-    console.log(e.keyCode);
     if (e.keyCode == 39) {
         player.turn(true);
     }
@@ -204,8 +186,16 @@ document.onkeydown = function (e) {
     else if (e.keyCode == 65) {
         move = !move;
     }
-    else if (e.keyCode == 66) {
-        collectibles.push(CollectibleFactory.getCollectible([0, 0]));
+    else if (e.keyCode == 32) {
+        player.usePower();
+        //send event
+    }
+}
+
+document.onkeyup = function(e){
+    if(e.keyCode == 32){
+        player.stopUsingPower();
+        //send event
     }
 }
 

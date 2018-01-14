@@ -1,0 +1,73 @@
+[debug] [2018-01-13T19:34:28.686Z] ----------------------------------------------------------------------
+[debug] [2018-01-13T19:34:28.689Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Busta\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] [2018-01-13T19:34:28.689Z] CLI Version:   3.16.0
+[debug] [2018-01-13T19:34:28.689Z] Platform:      win32
+[debug] [2018-01-13T19:34:28.689Z] Node Version:  v6.10.2
+[debug] [2018-01-13T19:34:28.690Z] Time:          Sat Jan 13 2018 22:34:28 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-13T19:34:28.690Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-01-13T19:34:28.705Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-01-13T19:34:28.706Z] > authorizing via signed-in user
+[debug] [2018-01-13T19:34:28.708Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/trake-cc1ed  
+  
+ Sat Jan 13 2018 22:34:28 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-13T19:34:29.613Z] <<< HTTP RESPONSE 200
+[debug] [2018-01-13T19:34:29.615Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/trake-cc1ed/tokens  
+  
+ Sat Jan 13 2018 22:34:29 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-13T19:34:30.368Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\Users\Busta\Documents\SideProjects\Trake'...
+[info] 
+[debug] [2018-01-13T19:34:30.371Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/trake-cc1ed  
+  
+ Sat Jan 13 2018 22:34:30 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-13T19:34:31.428Z] <<< HTTP RESPONSE 200
+[debug] [2018-01-13T19:34:31.428Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/869847219674/clients/_:getWebAppConfig  
+  
+ Sat Jan 13 2018 22:34:31 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-13T19:34:32.122Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] +  hosting: Local server: http://localhost:5000
+
+[debug] [2018-01-14T08:00:00.579Z] ----------------------------------------------------------------------
+[debug] [2018-01-14T08:00:00.582Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Busta\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] [2018-01-14T08:00:00.583Z] CLI Version:   3.16.0
+[debug] [2018-01-14T08:00:00.583Z] Platform:      win32
+[debug] [2018-01-14T08:00:00.583Z] Node Version:  v6.10.2
+[debug] [2018-01-14T08:00:00.583Z] Time:          Sun Jan 14 2018 11:00:00 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-14T08:00:00.583Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-01-14T08:00:00.596Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-01-14T08:00:00.597Z] > authorizing via signed-in user
+[debug] [2018-01-14T08:00:00.599Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-01-14T08:00:00.599Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ { refresh_token: '1/e1tgn0Bj_AaqY7qZSJtQt5gNuD6nUQ9LPcfjJUxCUYA',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Sun Jan 14 2018 11:00:00 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-14T08:00:00.829Z] <<< HTTP RESPONSE 200
+[debug] [2018-01-14T08:00:00.836Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/trake-cc1ed  
+  
+ Sun Jan 14 2018 11:00:00 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-14T08:00:01.881Z] <<< HTTP RESPONSE 200
+[debug] [2018-01-14T08:00:01.882Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/trake-cc1ed/tokens  
+  
+ Sun Jan 14 2018 11:00:01 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-14T08:00:02.785Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\Users\Busta\Documents\SideProjects\Trake'...
+[info] 
+[debug] [2018-01-14T08:00:02.788Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/trake-cc1ed  
+  
+ Sun Jan 14 2018 11:00:02 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-14T08:00:03.847Z] <<< HTTP RESPONSE 200
+[debug] [2018-01-14T08:00:03.848Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/869847219674/clients/_:getWebAppConfig  
+  
+ Sun Jan 14 2018 11:00:03 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-14T08:00:04.974Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] +  hosting: Local server: http://localhost:5000
+

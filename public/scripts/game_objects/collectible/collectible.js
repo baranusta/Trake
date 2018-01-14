@@ -7,14 +7,4 @@ class Collectible extends RectangleGameObject{
     {
         super.draw(frame, this.color);
     }
-
-    apply(player){
-        if(player instanceof Snake){
-            this.applyPower(player);
-        }
-        else
-        {
-            throw "wrong apply parameter";
-        }
-    }
 }
