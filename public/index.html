@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <title>Trake</title>
     <link href="styles/game.css" rel="stylesheet">
-    <link href="styles/welcome.css" rel="stylesheet">
+    <link href="styles/nick.css" rel="stylesheet">
     <link href="styles/lobby.css" rel="stylesheet">
     <link href="styles/styleCreateRoom.css" rel="stylesheet">
     <link href="styles/styleHelp.css" rel="stylesheet">
@@ -145,7 +145,7 @@
 
     <script type="text/javascript" src="scripts/game_objects/collectible/collectible.js"></script>
     <script type="text/javascript" src="scripts/game_objects/collectible/power.js"></script>
-    <script type="text/javascript" src="scripts/game_objects/collectible/perminent_speed_up.js"></script>
+    <script type="text/javascript" src="scripts/game_objects/collectible/permanent_speed_up.js"></script>
     <script type="text/javascript" src="scripts/game_objects/collectible/speed_up.js"></script>
     <script type="text/javascript" src="scripts/game_objects/collectible/collectibleFactory.js"></script>
 
@@ -158,15 +158,11 @@
 </head>
 
 <body>
-    <div class="welcomeScreen">
-        <input id="nick" name="nick" type="text" placeholder="nick" required />
-        <button type="button" onclick="enterLobby()">Multi player</button>
-        <button type="button" onclick="startSinglePlayer()">Single player</button>
-    </div>
     <div class="lobbyScreen">
         <div class="buttons">
             <button type="button" onclick="openCreateRoomView()">Create a New Room</button>
             <button type="button" onclick="joinRoom()">Join to a room!</button>
+            <button type="button" onclick="startSinglePlayer()">Single player</button>
             <button id="help" type="button" onclick="showHelp()">How to</button>
         </div>
         <table id="rooms">
@@ -176,6 +172,10 @@
                 <th>Players</th>
             </tr>
         </table>
+    </div>
+    <div class="nickScreen">
+        <input id="nick" name="nick" type="text" placeholder="nick" required />
+        <button type="button" onclick="enterLobby()">Enter</button>
     </div>
     <div class="createRoomScreen">
         <div class="outDiv" onclick="divOutClicked()"></div>
@@ -223,12 +223,16 @@
             </h2>
             <table>
                 <tr>
-                    <td valign="top">bate</td>
-                    <td valign="top">snake grows 1 unit</td>
+                    <td valign="top" style="width:10px;height:10px;background-color:black;"></td>
+                    <td valign="top">bate - snake grows 1 unit</td>
                 </tr>
                 <tr>
-                    <td valign="top">speed up</td>
-                    <td valign="top">gains limited time of speed. Press space to use!</td>
+                    <td valign="top" style="width:10px;height:10px;background-color:rgb(0, 255, 13);"></td>
+                    <td valign="top">speed up - gains limited time of speed. Press space to use!</td>
+                </tr>
+                <tr>
+                    <td valign="top" style="width:10px;height:10px;background-color:rgb(255, 0, 0);"></td>
+                    <td valign="top">permanent speed up - gains speed!</td>
                 </tr>
 
             </table>

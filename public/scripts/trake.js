@@ -21,8 +21,8 @@ var enterLobby = function () {
             function (data, status) {
                 playerName = nick;
                 populateRooms();
-                $('.lobbyScreen').show();
-                $('.welcomeScreen').hide();
+                blur('lobbyScreen', 0);
+                $('.nickScreen').hide();
             })
             .fail(function (status) {
                 alert("name taken by another user");
@@ -34,7 +34,7 @@ var startSinglePlayer = function () {
     var nick = $('#nick').val();
     if (nick.length > 0) {
         $('.gameScreen').show();
-        $('.welcomeScreen').hide();
+        $('.lobbyScreen').hide();
         gameStart(1, 0);
     }
 }
@@ -45,7 +45,6 @@ var divOutClicked = function () {
     blur('lobbyScreen', 0);
 }
 
-
 var closeHelp = function () {
     blur('lobbyScreen', 0);
     shownViewDiv.hide();
@@ -53,7 +52,8 @@ var closeHelp = function () {
 }
 
 window.onload = function () {
-    $('.lobbyScreen').hide();
+    //$('.lobbyScreen').hide();
+    blur('lobbyScreen', 8);
     $('.createRoomScreen').hide();
     $('.helpScreenContainer').hide();
     $('.gamePrepScreen').hide();

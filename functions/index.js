@@ -160,8 +160,11 @@ pusher.trigger('presence-my-channel', 'my-event', {
 pusher.trigger('lobby', 'my-event', {
   "message": "hello world"
 });
+const api = functions.https.onRequest(app);
+module.exports = {
+  api
+}
 
-exports.app = functions.https.onRequest(app);
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //

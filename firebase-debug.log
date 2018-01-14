@@ -1,0 +1,46 @@
+[debug] [2018-01-14T11:09:22.846Z] ----------------------------------------------------------------------
+[debug] [2018-01-14T11:09:22.848Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Busta\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] [2018-01-14T11:09:22.849Z] CLI Version:   3.16.0
+[debug] [2018-01-14T11:09:22.849Z] Platform:      win32
+[debug] [2018-01-14T11:09:22.849Z] Node Version:  v6.10.2
+[debug] [2018-01-14T11:09:22.849Z] Time:          Sun Jan 14 2018 14:09:22 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-14T11:09:22.849Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-01-14T11:09:22.861Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-01-14T11:09:22.862Z] > authorizing via signed-in user
+[debug] [2018-01-14T11:09:22.864Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/trake-cc1ed  
+  
+ Sun Jan 14 2018 14:09:22 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-14T11:09:23.869Z] <<< HTTP RESPONSE 200
+[debug] [2018-01-14T11:09:23.870Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/trake-cc1ed/tokens  
+  
+ Sun Jan 14 2018 14:09:23 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-14T11:09:24.732Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\Users\Busta\Documents\SideProjects\Trake'...
+[info] 
+[debug] [2018-01-14T11:09:24.742Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/trake-cc1ed  
+  
+ Sun Jan 14 2018 14:09:24 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-14T11:09:25.824Z] <<< HTTP RESPONSE 200
+[debug] [2018-01-14T11:09:25.825Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/869847219674/clients/_:getWebAppConfig  
+  
+ Sun Jan 14 2018 14:09:25 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-14T11:09:26.418Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] +  hosting: Local server: http://localhost:5000
+
+[info] [hosting] Rewriting /favicon.ico to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
+[info] [hosting] Rewriting /favicon.ico to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
