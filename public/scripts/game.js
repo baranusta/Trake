@@ -44,7 +44,7 @@ var gameStart = function (playerCount, playerId) {
     aspectRatio = viewSize[0] / viewSize[1];
 
     gl.viewport(0, 0, canvas.width, canvas.height);
-    gl.clearColor(0, 0.0, 1, 1);
+    gl.clearColor(230 / 255.0, 208 / 255.0, 177 / 255.0, 1);
 
     isMultiPlayer = playerCount > 1;
     let grid = [1, 1];
@@ -130,8 +130,9 @@ const checkPlayerCollision = function (playerInConcernIndex, players, collectibl
 
     for (let i = 0; i < collectibles.length; i++) {
         const collectible = collectibles[i];
-        if (!players[playerInConcernIndex].power && Physics.isColliding(collectible.collider, players[playerInConcernIndex].getCollider())) {
-            players[playerInConcernIndex].power = collectible;
+        if (Physics.isColliding(collectible.collider, players[playerInConcernIndex].getCollider())) {
+            if(!collectible.apply(players[playerInConcernIndex]) && !players[playerInConcernIndex].power)
+                players[playerInConcernIndex].power = collectible;
             collectibles.splice(i, 1);
             break;
         }

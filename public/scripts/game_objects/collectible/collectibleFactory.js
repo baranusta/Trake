@@ -27,13 +27,16 @@ class CollectibleFactory {
             type = choice;
         switch (type) {
             case 0://Bait
-                collectible.color = vec4(1.0, 1.0, 1.0, 1.0);
+                collectible.color = vec4(0.0, 0.0, 0.0, 1.0);
                 collectible.apply = function (player) {
                     player.changingLength += baitAddLength;
                 };
                 break;
             case 1:
                 collectible = new SpeedUp(center);
+                break;
+            case 2:
+                collectible = new PerminentSpeedUp(center);
                 break;
             default:
                 break;

@@ -17,3 +17,29 @@
     background: rgb(228, 228, 228);
     box-sizing: border-box;
 }
+
+/* #game #info {
+
+}  */
+.game #info #powerUp{
+    float: left;
+    height: 40px;
+} 
+
+.game #info #powerUp #left{
+    border:1px solid black;
+    width: 150px;
+    height: 80%;
+    float: left;
+} 
+
+.game #info #powerUp #left #left-bar{
+    height: 100%;
+    width: 0%;
+    background-color:darkslategray;
+} 
+
+.game #info #rest{
+    
+    float: right;
+} 

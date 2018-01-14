@@ -3,7 +3,7 @@ class Snake {
 
     constructor(name, startPoint, direction, color) {
         this.name = name;
-        this.speed = 0.002;
+        this.speed = snakeSpeed;
         this.color = color;
         this.isUsingPower = false;
 
@@ -101,9 +101,11 @@ class Snake {
 
         if (this.isUsingPower) {
             console.log(this.power.leftPower)
-            this.power.leftPower--;
-            if (this.power.leftPower == 0) {
-                this.stopUsingPower();
+            let isFinished = !this.power.update();
+
+            if(isFinished){
+                this.power.stop(this);
+                this.isUsingPower = false;
                 this.power = null;
             }
         }

@@ -145,6 +145,7 @@
 
     <script type="text/javascript" src="scripts/game_objects/collectible/collectible.js"></script>
     <script type="text/javascript" src="scripts/game_objects/collectible/power.js"></script>
+    <script type="text/javascript" src="scripts/game_objects/collectible/perminent_speed_up.js"></script>
     <script type="text/javascript" src="scripts/game_objects/collectible/speed_up.js"></script>
     <script type="text/javascript" src="scripts/game_objects/collectible/collectibleFactory.js"></script>
 
@@ -244,10 +245,20 @@
             <canvas id="gl-canvas" width="1028" height="512">
                 Oops ... your browser doesn't support the HTML5 canvas element
             </canvas>
-            <h3 id="score">Score: </h3>
-            <ol id="playingPlayers">
-                <!-- <li style="color:blue;">Coffee</li> -->
-            </ol>
+            <div id='info'>
+                <div id="powerUp">
+                    <p id='name'> None </p>
+                    <div id="left">
+                        <div id="left-bar"></div>
+                    </div>
+                </div>
+                <div id="rest">
+                    <h3 id="score">Score: </h3>
+                    <ol id="playingPlayers">
+                        <!-- <li style="color:blue;">Coffee</li> -->
+                    </ol>
+                </div>
+            </div>
         </div>
         <div id="post_game">
             <h1 id='score_head'>score</h1>

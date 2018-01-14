@@ -7,4 +7,9 @@ class Collectible extends RectangleGameObject{
     {
         super.draw(frame, this.color);
     }
+
+    //returns false if there is no usePower functionality
+    apply(snake){
+        return false;
+    }
 }
