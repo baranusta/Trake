@@ -7,6 +7,8 @@ const bodyParser = require('body-parser')
 const app = express()
 const Pusher = require('pusher')
 const crypto = require('crypto')
+const cors = require("cors")
+
 var rooms = {};
 var users = {};
 
@@ -17,27 +19,11 @@ var pusher = new Pusher({
   cluster: 'eu',
   encrypted: true
 });
-app.use('/public',express.static(__dirname + "/public"));
-app.use('/scripts', express.static(__dirname + '/scripts'));
-app.use('/styles', express.static(__dirname + '/styles'));
-//app.use('/images', express.static(__dirname + '/scripts'));
+
 // // Body parser middleware
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-
-app.use((req, res, next) => {
-  // Website you wish to allow to connect
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  // Request methods you wish to allow
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
-  // Request headers you wish to allow
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type')
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
-  res.setHeader('Access-Control-Allow-Credentials', false)
-  // Pass to next layer of middleware
-  next()
-})
+app.use(cors({origin:true}));
 
 // Index API route for the Express app
 // app.get('/', (req, res) => {
@@ -160,10 +146,8 @@ pusher.trigger('presence-my-channel', 'my-event', {
 pusher.trigger('lobby', 'my-event', {
   "message": "hello world"
 });
-const api = functions.https.onRequest(app);
-module.exports = {
-  api
-}
+
+exports.app = functions.https.onRequest(app);
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions

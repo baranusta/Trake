@@ -66,12 +66,13 @@ var _wasPageCleanedUp = false;
 function pageCleanup() {
     if (!_wasPageCleanedUp) {
         _wasPageCleanedUp = true;
-        $.ajax({
-            type: 'POST',
-            url: "/deleteUser",
-            data: { name: playerName },
-            async: false
-        });
+        if (!!playerName)
+            $.ajax({
+                type: 'POST',
+                url: "/deleteUser",
+                data: { name: playerName },
+                async: false
+            });
     }
 }
 
