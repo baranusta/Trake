@@ -306,6 +306,7 @@ var populatePlayersList = function () {
     if (!isMultiPlayer)
         return;
 
+    $('#playingPlayers').empty();
     Object.keys(gameChannel.members.members).forEach(function (key, index) {
         $('#playingPlayers').append("<li style='color:rgb(" +
             colors[index][0] * 255 + "," +
@@ -361,7 +362,6 @@ var playAgain = function () {
 var quitRoom = function () {
     //unsubscribe channel
     snakes = [];
-    $('#playingPlayers').empty();
     $('.lobbyScreen').show();
     $('.gameScreen').hide();
 }
