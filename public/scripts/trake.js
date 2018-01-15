@@ -1,15 +1,9 @@
 var shownViewDiv;
 var playerName;
+var pusher;
 
 // Enable pusher logging - don't include this in production
 Pusher.logToConsole = true;
-
-var pusher = new Pusher('17e4a8e6fe75db393468', {
-    cluster: 'eu',
-    encrypted: true,
-    authEndpoint: 'http://localhost:8000/pusher/auth'
-});
-
 
 var enterLobby = function () {
     var nick = $('#nick').val();
@@ -19,6 +13,18 @@ var enterLobby = function () {
                 name: nick,
             },
             function (data, status) {
+                console.log(window.location.href + 'pusher/auth');
+                
+                pusher = new Pusher(pusherKey, {
+                    cluster: 'eu',
+                    encrypted: true,
+                    authEndpoint: '/auth',
+                    auth: {
+                        params: {
+                            name: nick
+                        }
+                    }
+                });
                 playerName = nick;
                 populateRooms();
                 blur('lobbyScreen', 0);
@@ -35,6 +41,7 @@ var startSinglePlayer = function () {
     if (nick.length > 0) {
         $('.gameScreen').show();
         $('.lobbyScreen').hide();
+        isHost = true;
         gameStart(1, 0);
     }
 }
@@ -66,6 +73,15 @@ var _wasPageCleanedUp = false;
 function pageCleanup() {
     if (!_wasPageCleanedUp) {
         _wasPageCleanedUp = true;
+        console.log("cleanup");
+        if (!!lobbyChannel){
+            pusher.unsubscribe(lobbyChannel.name);
+            lobbyChannel = null;
+        }
+        if (!!gameChannel)
+        {
+            pusher.unsubscribe(gameChannel.name);
+        }
         if (!!playerName)
             $.ajax({
                 type: 'POST',

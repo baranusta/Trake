@@ -13,6 +13,8 @@ let intervals = [];
 let gameEnded = false;
 let isMultiPlayer = false;
 
+var isHost;
+
 var colors = [
     vec4(1.0, 0.0, 0.0, 1.0),
     vec4(1.0, 1.0, 0.0, 1.0),

@@ -1,9 +1,10 @@
+var lobbyChannel;
 
 var addRoomToTable = function (data) {
-    var markup = "<tr id='" + data.name + "'>" +
+    var markup = "<tr class='" + data.createdBy + "'id='" + data.name + "'>" +
         "<td>" + data.name + "</td>" +
-        "<td>" + (data.createdBy || "lol") + "</td>" +
-        "<td>" + data.joined + "/" + data.playerCount + "</td></tr>";
+        "<td>" + data.createdBy + "</td>" +
+        "<td>" + data.playerLimit + "</td></tr>";
     console.log(markup);
     $("table[id=rooms] tbody").append(markup);
     $('#rooms tr').click(function () {
@@ -17,10 +18,10 @@ var addRoomToTable = function (data) {
 var populateRooms = function () {
     $.get("/rooms",
         function (data, status) {
-            console.log(data);
             for (var channelName in data) {
                 addRoomToTable(data[channelName]);
             }
+            initLobbyChannel();
         });
 }
 
@@ -35,17 +36,21 @@ var joinRoom = function () {
     var selectedRoom = $("#rooms tr.selected");
     console.log(selectedRoom)
     if (selectedRoom.length > 0) {
-        var playerSection = $(selectedRoom).find("td:nth-child(3)").text().split("/");
-        if (playerSection[0] < playerSection[1]) {
-            var roomName = selectedRoom.attr('id');
-            $.post("/joinRoom",
-                {
-                    name: roomName,
-                },
-                function (data, status) {
-                    connectToGame(roomName);
-                });
-        }
+        //var playerSection = $(selectedRoom).find("td:nth-child(3)").text().split("/");
+        var roomName = selectedRoom.attr('id');
+        $.post("/joinRoom",
+            {
+                roomName: roomName,
+                playerName: playerName
+            },
+            function (data, status) {
+                //lobbyChannel.trigger('client-room-player-number', { name: roomName, count: +1 });
+                isHost = false;
+                connectToGame(roomName);
+            })
+            .fail (function() {
+                alert("room is full");
+            });
     }
 }
 
@@ -57,26 +62,35 @@ var showHelp = function (form) {
     shownViewDiv.show();
 }
 
+var initLobbyChannel = function () {
+    lobbyChannel = pusher.subscribe('presence-lobby');
 
-var lobbyChannel = pusher.subscribe('lobby');
+    lobbyChannel.bind('client-room-added', function (data) {
+        console.log(data);
+        addRoomToTable(data);
+    });
 
+    lobbyChannel.bind('client-room-removed', function (data) {
+        console.log(data);
+        if (!!joinedRoom && data.name == joinedRoom) {
+            quitRoom();
+        }
+        $("table #" + data.name).remove();
+    });
 
-lobbyChannel.bind('room-added', function (data) {
-    addRoomToTable(data);
-});
+    lobbyChannel.bind('pusher:subscription_succeeded', function (data) {
+        console.log("lobby subscribed");
 
-lobbyChannel.bind('room-removed', function (data) {
-    $("table #" + data["channelName"]).remove();
-});
+    });
 
-lobbyChannel.bind('room-joined', function (data) {
-    console.log(data);
-    $("#"+data.name+" td:eq(2)").html(data.joined + "/" + data.playerCount);
-});
+    lobbyChannel.bind('pusher:subscription_error', function (status) {
+        alert("Can not connect.");
+    });
 
-lobbyChannel.bind('pusher:subscription_succeeded', function (data) {
-});
-
-lobbyChannel.bind('pusher:subscription_error', function (status) {
-    alert("Can not connect.");
-});
+    lobbyChannel.bind('pusher:member_removed', function (member) {
+        console.log($("." + member.info.name).prop('id'))
+        if (!!joinedRoom && joinedRoom == $("." + member.info.name).prop('id'))
+            quitRoom();
+        $("table ." + member.info.name).remove();
+    });
+} 

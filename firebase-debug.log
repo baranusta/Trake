@@ -1,0 +1,124 @@
+[debug] [2018-01-15T11:36:44.873Z] ----------------------------------------------------------------------
+[debug] [2018-01-15T11:36:44.876Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Busta\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] [2018-01-15T11:36:44.876Z] CLI Version:   3.16.0
+[debug] [2018-01-15T11:36:44.876Z] Platform:      win32
+[debug] [2018-01-15T11:36:44.876Z] Node Version:  v6.10.2
+[debug] [2018-01-15T11:36:44.877Z] Time:          Mon Jan 15 2018 14:36:44 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-15T11:36:44.877Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-01-15T11:36:44.890Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-01-15T11:36:44.890Z] > authorizing via signed-in user
+[debug] [2018-01-15T11:36:44.892Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/trake-cc1ed  
+  
+ Mon Jan 15 2018 14:36:44 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-15T11:36:45.884Z] <<< HTTP RESPONSE 200
+[debug] [2018-01-15T11:36:45.885Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/trake-cc1ed/tokens  
+  
+ Mon Jan 15 2018 14:36:45 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-15T11:36:46.672Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\Users\Busta\Documents\SideProjects\Trake'...
+[info] 
+[debug] [2018-01-15T11:36:46.679Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/trake-cc1ed  
+  
+ Mon Jan 15 2018 14:36:46 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-15T11:36:47.587Z] <<< HTTP RESPONSE 200
+[debug] [2018-01-15T11:36:47.588Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/869847219674/clients/_:getWebAppConfig  
+  
+ Mon Jan 15 2018 14:36:47 GMT+0300 (Turkey Standard Time)
+[debug] [2018-01-15T11:36:48.585Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] +  hosting: Local server: http://localhost:5000
+
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /createRoom to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /leaveRoom to live function app
+[info] [hosting] Rewriting /createRoom to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /createRoom to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /createRoom to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /joinRoom to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /createRoom to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /joinRoom to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
+[info] [hosting] Rewriting /leaveRoom to live function app
+[info] [hosting] Rewriting /leaveRoom to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /createRoom to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /joinRoom to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /createRoom to live function app
+[info] [hosting] Rewriting /createRoom to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /joinRoom to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
+[info] [hosting] Rewriting /leaveRoom to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /createUser to live function app
+[info] [hosting] Rewriting /rooms to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /createRoom to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /joinRoom to live function app
+[info] [hosting] Rewriting /auth to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
+[info] [hosting] Rewriting /leaveRoom to live function app
+[info] [hosting] Rewriting /deleteUser to live function app
