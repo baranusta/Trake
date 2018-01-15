@@ -6,6 +6,9 @@ var pusher;
 Pusher.logToConsole = true;
 
 var enterLobby = function () {
+    if(!initContext()){
+        alert("your browser does not support");
+    }
     var nick = $('#nick').val();
     if (nick.length > 0) {
         $.post("/createUser",
@@ -42,7 +45,8 @@ var startSinglePlayer = function () {
         $('.gameScreen').show();
         $('.lobbyScreen').hide();
         isHost = true;
-        gameStart(1, 0);
+        initGame(1);
+        startGame(0);
     }
 }
 

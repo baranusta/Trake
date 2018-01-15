@@ -27,6 +27,7 @@ class CollectibleFactory {
             type = choice;
         switch (type) {
             case 0://Bait
+                collectible = new Collectible(center);
                 collectible.color = vec4(0.0, 0.0, 0.0, 1.0);
                 collectible.apply = function (player) {
                     player.changingLength += baitAddLength;
@@ -41,6 +42,7 @@ class CollectibleFactory {
             default:
                 break;
         }
+        collectible.type = type;
         return collectible;
     }
 }

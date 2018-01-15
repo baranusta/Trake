@@ -5,6 +5,7 @@ class Snake {
         this.name = name;
         this.speed = snakeSpeed;
         this.color = color;
+        this.dead = false;
         this.isUsingPower = false;
 
         var length = snakeInitialLength;
@@ -73,6 +74,7 @@ class Snake {
         if (!!this.power && !this.isUsingPower) {
             this.power.usePower(this);
             this.isUsingPower = true;
+            sendEvent("client-use-power", {index: playerIndex});
         }
     }
 
@@ -80,6 +82,7 @@ class Snake {
         if (!!this.power) {
             this.isUsingPower = false;
             this.power.stop(this);
+            sendEvent("client-stop-power", {index: playerIndex});
         }
     }
 

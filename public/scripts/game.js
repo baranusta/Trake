@@ -8,10 +8,15 @@ let collectibles = [];
 let bait;
 let frame;
 let score;
+let rank;
 let intervals = [];
 
-let gameEnded = false;
+let gameEnded = true;
 let isMultiPlayer = false;
+
+var url = "https://trake-cc1ed.firebaseapp.com/snake-head.png";
+if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+    url = "http://localhost:5000/snake-head.png"
 
 var isHost;
 
@@ -26,27 +31,31 @@ var colors = [
     vec4(1.0)
 ];
 
-var gameStart = function (playerCount, playerId) {
-    blur('game', 0);
-    $('#post_game').hide();
-    $('#playAgainBtn').hide();
-    $('#post_game .quitRoom').hide();
-    gameEnded = false;
-
-    score = 0;
-    frame = 0;
-    snakes = [];
-    collectibles = [];
+var initContext = function () {
     let canvas = document.getElementById("gl-canvas");
     gl = WebGLUtils.setupWebGL(canvas);
     if (!gl) {
-        alert("yo");
+        return false;
     }
     viewSize = [canvas.width, canvas.height];
     aspectRatio = viewSize[0] / viewSize[1];
 
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(230 / 255.0, 208 / 255.0, 177 / 255.0, 1);
+    return true;
+}
+
+var initGame = function (playerCount) {
+    blur('game', 0);
+    $('#post_game').hide();
+    $('#playAgainBtn').hide();
+    $('#post_game .quitRoom').hide();
+    gameEnded = true;
+
+    score = 0;
+    frame = 0;
+    rank = playerCount;
+    collectibles = [];
 
     isMultiPlayer = playerCount > 1;
     let grid = [1, 1];
@@ -55,41 +64,51 @@ var gameStart = function (playerCount, playerId) {
     else
         updateScore(score);
 
-    let gridSize = [2.0 / grid[0], 2.0 / grid[1]];
+    if (isHost) {
+        createSnakes(playerCount, grid, [2.0 / grid[0], 2.0 / grid[1]]);
 
-    for (let i = 0; i < playerCount; i++) {
-        var color = colors[i];
-        var pos = vec2(-1 + gridSize[0] * (i % grid[0] + 1.0 / 2.0), -1 + gridSize[1] * (i % grid[1] + 1.0 / 2.0));
-        var direction = getRandomInt(0, DIRECTION.COUNT - 1);
-        snakes.push(new Snake("P_" + i, pos, direction, color));
-    }
-    player = snakes[playerId];
-    playerIndex = playerId;
-    
-    var url = "https://trake-cc1ed.firebaseapp.com/snake-head.png";
-    if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-        url = "http://localhost:5000/snake-head.png"
-    loadTexture(gl, url, function (texture) {
-        gameLoop();
-        for (var i = 0, len = snakes.length; i < len; i++) {
-            snakes[i].head.addTexture(texture)
-        }
-    });
+        loadTexture(gl, url, function (texture) {
+            for (var i = 0, len = snakes.length; i < len; i++) {
+                snakes[i].head.addTexture(texture)
+            }
+        });
 
-
-    if (playerId == 0) {
         intervals.push(window.setInterval(function () {
             if (!bait) {
-                bait = CollectibleFactory.getCollectible(snakes, 0);
-                sendEvent("bait", { position: bait.displacement });
+                let collectible = CollectibleFactory.getCollectible(snakes, 0)
+                sendEvent("client-collectible", { position: collectible.displacement, type: collectible.type });
+                bait = collectible;
             }
         }, 7000));
         intervals.push(window.setInterval(function () {
-            collectibles.push(CollectibleFactory.getCollectible(snakes));
+            let collectible = CollectibleFactory.getCollectible(snakes)
+            collectibles.push(collectible);
+            sendEvent("client-collectible", { position: collectible.displacement, type: collectible.type });
         }, 5000));
+
+        setTimeout(function () {
+            sendEvent('client-start-game', {});
+            let index = 0;
+            console.log(gameChannel.members.members);
+            Object.keys(gameChannel.members.members).forEach(function(key,index) {
+                if (gameChannel.members.myID == key) {
+                    startGame(index);
+                    return;
+                }
+            });
+        }, 2000);
     }
 }
-  
+
+const startGame = function (playerId) {
+    console.log("WOWOWOW - playerId: " + playerId + "   WOWOWOW");
+    gameEnded = false;
+    playerIndex = playerId;
+    player = snakes[playerIndex];
+    gameLoop();
+    populatePlayersList();
+}
+
 const gameLoop = function () {
     gl.clear(gl.COLOR_BUFFER_BIT);
     frame++;
@@ -101,8 +120,8 @@ const gameLoop = function () {
         for (var i = 0, len = snakes.length; i < len; i++) {
             checkPlayerCollision(i, snakes, collectibles);
             snakes[i].draw(frame);
-            if (move) {
-                snakes[i].update();  
+            if (!snakes[i].dead) {
+                snakes[i].update();
             }
         }
         if (!!bait) bait.draw(frame)
@@ -129,11 +148,13 @@ const checkPlayerCollision = function (playerInConcernIndex, players, collectibl
         console.error("wrong parameters");
         return;
     }
+    if(players[playerInConcernIndex].dead)
+        return;
 
     for (let i = 0; i < collectibles.length; i++) {
         const collectible = collectibles[i];
         if (Physics.isColliding(collectible.collider, players[playerInConcernIndex].getCollider())) {
-            if(!collectible.apply(players[playerInConcernIndex]) && !players[playerInConcernIndex].power)
+            if (!collectible.apply(players[playerInConcernIndex]) && !players[playerInConcernIndex].power)
                 players[playerInConcernIndex].power = collectible;
             collectibles.splice(i, 1);
             break;
@@ -154,8 +175,14 @@ const checkPlayerCollision = function (playerInConcernIndex, players, collectibl
         for (let i = 0; i < players.length; i++) {
             const player = players[i];
             if (playerInConcernIndex !== i && Physics.isColliding(player.getCollider(), collisionBox)) {
-                if (playerIndex == playerInConcernIndex)
+                if (playerIndex == playerInConcernIndex) {
                     gameEnded = true;
+                    showGameOver();
+                }
+                else {
+                    players[playerInConcernIndex].dead = true;
+                    rank--;
+                }
                 console.log("player" + playerInConcernIndex + "  collided");
                 return false;
             }
@@ -163,16 +190,28 @@ const checkPlayerCollision = function (playerInConcernIndex, players, collectibl
 
         if (Physics.isColliding(players[playerInConcernIndex].getCollider(), collisionBox)) {
             if (!players[playerInConcernIndex].isFirstPartsCollisionBox(collisionBox)) {
-                if (playerIndex == playerInConcernIndex)
+                if (playerIndex == playerInConcernIndex) {
                     gameEnded = true;
+                    showGameOver();
+                }
+                else {
+                    players[playerInConcernIndex].dead = true;
+                    rank--;
+                }
                 console.log("player" + playerInConcernIndex + " self collided");
                 return false;
             }
         }
 
         if (!Physics.isCompletelyInside(world.boundaries, collisionBox)) {
-            if (playerIndex == playerInConcernIndex)
+            if (playerIndex == playerInConcernIndex) {
                 gameEnded = true;
+                showGameOver();
+            }
+            else {
+                players[playerInConcernIndex].dead = true;
+                rank--;
+            }
             console.log("player" + playerInConcernIndex + " collided to boundaries");
         }
         return true;
@@ -182,45 +221,114 @@ const checkPlayerCollision = function (playerInConcernIndex, players, collectibl
 var move = true;
 document.onkeydown = function (e) {
     if (e.keyCode == 39) {
+        sendEvent("client-turn", { direction: true, index: playerIndex });
         player.turn(true);
     }
-    else if (e.keyCode == 37)
+    else if (e.keyCode == 37) {
+        sendEvent("client-turn", { direction: false, index: playerIndex });
         player.turn(false);
-    else if (e.keyCode == 65) {
+    }
+    else if (e.keyCode === 27) {
         move = !move;
     }
     else if (e.keyCode == 32) {
         player.usePower();
-        //send event
     }
 }
 
-document.onkeyup = function(e){
-    if(e.keyCode == 32){
+document.onkeyup = function (e) {
+    if (e.keyCode == 32) {
         player.stopUsingPower();
         //send event
     }
 }
 
+const usePower = function (data) {
+    snakes[data.index].usePower();
+}
+
+const stopPower = function (data) {
+    snakes[data.index].stopUsingPower();
+}
+
+const turnSnake = function (data) {
+    snakes[data.index].turn(data.direction);
+}
+
+const addCollectible = function (data) {
+    let collectible = CollectibleFactory.getCollectible([], data.type, data.position)
+    collectibles.push(collectible);
+}
+
+const setSnakes = function (data) {
+    snakes = [];
+    for (let index = 0; index < data.snakes.length; index++) {
+        let element = data.snakes[index];
+        snakes.push(new Snake("P_" + index, element.position, element.direction, element.color));
+    }
+    loadTexture(gl, url, function (texture) {
+        for (var i = 0, len = snakes.length; i < len; i++) {
+            snakes[i].head.addTexture(texture)
+        }
+    });
+}
+
+const createSnakes = function (playerCount, grid, gridSize) {
+    var data = {};
+    data.snakes = [];
+    for (let i = 0; i < playerCount; i++) {
+        var color = colors[i];
+        var pos = vec2(-1 + gridSize[0] * (i % grid[0] + 1.0 / 2.0), -1 + gridSize[1] * (i % grid[1] + 1.0 / 2.0));
+        var direction = getRandomInt(0, DIRECTION.COUNT - 1);
+        snakes.push(new Snake("P_" + i, pos, direction, color));
+        data.snakes.push({ color: color, position: pos, direction: direction });
+    }
+    sendEvent('client-snake-created', { snakes: data.snakes });
+}
+
+var populatePlayersList = function(){
+
+    Object.keys(gameChannel.members.members).forEach(function(key,index) {
+        if (gameChannel.members.myID == key) {
+            $('#playingPlayers').append("<li style='color:rgb(" + 
+            colors[index][0] * 255 + "," +
+            colors[index][1] * 255 + "," + 
+            colors[index][2] * 255 +");'>" + 
+            gameChannel.members.members[key].name + "</li>");
+        }
+    });
+}
+
 var sendEvent = function (eventName, data) {
     console.log(data);
     if (isMultiPlayer) {
-
+        gameChannel.trigger(eventName, data);
     }
 }
 
 var showGameOver = function () {
     blur('game', 8);
     $('#post_game').show();
-    $('#score_head').html('Your Score: ' + score);
     for (var i = 0; i <= intervals.length; i++) {
         window.clearInterval(intervals[i]);
     }
 
     if (isMultiPlayer) {
+        if (rank == 1) {
+            $('#score_head').html('Congratulations ' + rank + 'st place');
+        }
+        else {
+            let th = 'nd';
+            if (rank == 3)
+                th = 'rd';
+            else
+                th = 'th';
+            $('#score_head').html(':( ' + rank + th + ' place');
+        }
         $('#post_game .quitRoom').show();
     }
     else {
+        $('#score_head').html('Your Score: ' + score);
         $('#playAgainBtn').show();
     }
 }

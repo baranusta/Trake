@@ -11,11 +11,14 @@ var connectToGame = function (roomName) {
     gameChannel = pusher.subscribe('presence-' + roomName);
 
     gameChannel.bind('pusher:member_added', function (member) {
-        $( ".joined_players" ).each(function( index ) {
+        if(!gameEnded)
+            return;
+
+        $(".joined_players").each(function (index) {
             $(this).css("font-weight", "normal");
-          });
+        });
         $("#readyBtn").prop("disabled", false);
-        if(isReady){
+        if (isReady) {
             alert(member.info.name + "joined the room, click ready again when you are");
             isReady = false;
         }
@@ -25,17 +28,19 @@ var connectToGame = function (roomName) {
     });
 
     gameChannel.bind('pusher:member_removed', function (member) {
-        $(".joined_players" ).each(function( index ) {
-            $(this).css("font-weight", "normal");
-          });
-        $("#readyBtn").prop("disabled", false);
-        if(isReady){
-            alert(member.info.name + "left the room, click ready again when you are");
-            isReady = false;
-        }
-        readyPlayer = 0;
-
-        $('#' + member.id).remove();
+        if(!gameEnded)
+            return;
+            $(".joined_players").each(function (index) {
+                $(this).css("font-weight", "normal");
+            });
+            $("#readyBtn").prop("disabled", false);
+            if (isReady) {
+                alert(member.info.name + "left the room, click ready again when you are");
+                isReady = false;
+            }
+            readyPlayer = 0;
+    
+            $('#' + member.id).remove();
     });
 
 
@@ -44,9 +49,6 @@ var connectToGame = function (roomName) {
         increaseReady();
     });
 
-    gameChannel.bind('client-start', function (data) {
-        //lets get this started bitches.
-    });
     gameChannel.bind('pusher:subscription_succeeded', function (members) {
         members.each(function (member) {
             // for example:
@@ -59,22 +61,45 @@ var connectToGame = function (roomName) {
         quit();
     });
 
+    gameChannel.bind('client-snake-created', function (data) {
+        setSnakes(data);
+    });
+
+    gameChannel.bind('client-turn', function (data) {
+        turnSnake(data);
+    });    
+    
+    gameChannel.bind('client-collectible', function (data) {
+        addCollectible(data);
+    });
+
+    gameChannel.bind('client-use-power', function (data) {
+        usePower(data);
+    });    
+    
+    gameChannel.bind('client-stop-power', function (data) {
+        stopPower(data);
+    });
+
+    gameChannel.bind('client-start-game', function (data) {
+        Object.keys(gameChannel.members.members).forEach(function(key,index) {
+            if (gameChannel.members.myID == key) {
+                startGame(index);
+                return;
+            }
+        });
+    });
     $('.gamePrepScreen').show();
 }
 
-var increaseReady = function(){
-    if(++readyPlayer == gameChannel.members.count){
+var increaseReady = function () {
+    if (++readyPlayer == gameChannel.members.count) {
         let myId = gameChannel.members.myID;
-        let index = 0;
-        for (var memberId in gameChannel.members.members) {
-            if (gameChannel.members.members.hasOwnProperty(memberId) && myId == memberId) {
-                $('.gameScreen').show();
-                $('.gamePrepScreen').hide();
-                gameStart(readyPlayer, index);
-                break;
-            }
-            index++;
-        }
+        initGame(readyPlayer);
+
+        $('.gameScreen').show();
+        $('.gamePrepScreen').hide();
+        $('.lobbyScreen').hide();
     }
 }
 
@@ -84,21 +109,23 @@ var ready = function () {
     console.log(gameChannel.members);
     $("#readyBtn").prop("disabled", true);
     $('#' + gameChannel.members.me.id).css("font-weight", "Bold");
-    gameChannel.trigger("client-ready", {id: gameChannel.members.me.id});
+    gameChannel.trigger("client-ready", { id: gameChannel.members.me.id });
 }
 
 var quitRoom = function () {
-    if(isHost){
-        lobbyChannel.trigger('client-room-removed', {name: gameChannel.name.split("-")[1]});
+    if (isHost) {
+        lobbyChannel.trigger('client-room-removed', { name: gameChannel.name.split("-")[1] });
     }
     pusher.unsubscribe(gameChannel.name);
-    $.post("/leaveRoom", {name: joinedRoom},
-    function (data, status) {
-    });
+    $.post("/leaveRoom", { name: joinedRoom },
+        function (data, status) {
+        });
     gameChannel = null;
     joinedRoom = null;
     $("#readyBtn").prop("disabled", false);
     $('.gamePrepScreen p').remove();
     $('.gamePrepScreen').hide();
+    $('.gameScreen').hide();
+    $('.lobbyScreen').show();
 }
 
