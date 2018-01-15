@@ -20,15 +20,6 @@ var pusher = new Pusher({
   cluster: 'eu',
   encrypted: true
 });
-
-//Production
-// var pusher = new Pusher({
-//   appId: '453935',
-//   key: '31575cc8f2fac1cc44a0',
-//   secret: 'f9d3f772fc762ad39c41',
-//   cluster: 'eu',
-//   encrypted: true
-// });
 // // Body parser middleware
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
