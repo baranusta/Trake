@@ -11,7 +11,7 @@ var connectToGame = function (roomName) {
     gameChannel = pusher.subscribe('presence-' + roomName);
 
     gameChannel.bind('pusher:member_added', function (member) {
-        if(!gameEnded)
+        if(!$('.gamePrepScreen').is(":visible"))
             return;
 
         $(".joined_players").each(function (index) {
@@ -28,7 +28,7 @@ var connectToGame = function (roomName) {
     });
 
     gameChannel.bind('pusher:member_removed', function (member) {
-        if(!gameEnded)
+        if(!$('.gamePrepScreen').is(":visible"))
             return;
             $(".joined_players").each(function (index) {
                 $(this).css("font-weight", "normal");
@@ -82,7 +82,7 @@ var connectToGame = function (roomName) {
     });
 
     gameChannel.bind('client-start-game', function (data) {
-        Object.keys(gameChannel.members.members).forEach(function(key,index) {
+        Object.keys(gameChannel.members.members).sort().forEach(function(key,index) {
             if (gameChannel.members.myID == key) {
                 startGame(index);
                 return;

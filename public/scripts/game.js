@@ -89,8 +89,7 @@ var initGame = function (playerCount) {
         setTimeout(function () {
             sendEvent('client-start-game', {});
             let index = 0;
-            console.log(gameChannel.members.members);
-            Object.keys(gameChannel.members.members).forEach(function(key,index) {
+            Object.keys(gameChannel.members.members).sort().forEach(function (key, index) {
                 if (gameChannel.members.myID == key) {
                     startGame(index);
                     return;
@@ -148,7 +147,7 @@ const checkPlayerCollision = function (playerInConcernIndex, players, collectibl
         console.error("wrong parameters");
         return;
     }
-    if(players[playerInConcernIndex].dead)
+    if (players[playerInConcernIndex].dead)
         return;
 
     for (let i = 0; i < collectibles.length; i++) {
@@ -221,11 +220,23 @@ const checkPlayerCollision = function (playerInConcernIndex, players, collectibl
 var move = true;
 document.onkeydown = function (e) {
     if (e.keyCode == 39) {
-        sendEvent("client-turn", { direction: true, index: playerIndex });
+        sendEvent("client-turn", { 
+            direction: true, 
+            index: playerIndex , 
+            lastPart:{
+                center: player.parts[player.i_first].center, 
+                size:player.parts[player.i_first].size}, 
+            head: player.head.displacement });
         player.turn(true);
     }
     else if (e.keyCode == 37) {
-        sendEvent("client-turn", { direction: false, index: playerIndex });
+        sendEvent("client-turn", { 
+            direction: false, 
+            index: playerIndex , 
+            lastPart:{
+                center: player.parts[player.i_first].center, 
+                size:player.parts[player.i_first].size}, 
+            head: player.head.displacement });
         player.turn(false);
     }
     else if (e.keyCode === 27) {
@@ -252,6 +263,9 @@ const stopPower = function (data) {
 }
 
 const turnSnake = function (data) {
+    snakes[data.index].center = data.lastPart.center;
+    snakes[data.index].size = data.lastPart.size;
+    snakes[data.index].head.displacement = data.head;
     snakes[data.index].turn(data.direction);
 }
 
@@ -261,6 +275,7 @@ const addCollectible = function (data) {
 }
 
 const setSnakes = function (data) {
+    console.log("snakesssssss");
     snakes = [];
     for (let index = 0; index < data.snakes.length; index++) {
         let element = data.snakes[index];
@@ -286,16 +301,17 @@ const createSnakes = function (playerCount, grid, gridSize) {
     sendEvent('client-snake-created', { snakes: data.snakes });
 }
 
-var populatePlayersList = function(){
+var populatePlayersList = function () {
 
-    Object.keys(gameChannel.members.members).forEach(function(key,index) {
-        if (gameChannel.members.myID == key) {
-            $('#playingPlayers').append("<li style='color:rgb(" + 
+    if (!isMultiPlayer)
+        return;
+
+    Object.keys(gameChannel.members.members).forEach(function (key, index) {
+        $('#playingPlayers').append("<li style='color:rgb(" +
             colors[index][0] * 255 + "," +
-            colors[index][1] * 255 + "," + 
-            colors[index][2] * 255 +");'>" + 
+            colors[index][1] * 255 + "," +
+            colors[index][2] * 255 + ");'>" +
             gameChannel.members.members[key].name + "</li>");
-        }
     });
 }
 
@@ -307,6 +323,7 @@ var sendEvent = function (eventName, data) {
 }
 
 var showGameOver = function () {
+    pusher.unsubscribe(gameChannel.name);
     blur('game', 8);
     $('#post_game').show();
     for (var i = 0; i <= intervals.length; i++) {
@@ -343,6 +360,8 @@ var playAgain = function () {
 
 var quitRoom = function () {
     //unsubscribe channel
+    snakes = [];
+    $('#playingPlayers').empty();
     $('.lobbyScreen').show();
     $('.gameScreen').hide();
 }
